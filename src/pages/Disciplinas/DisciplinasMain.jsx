@@ -6,13 +6,13 @@ function DisciplinasMain() {
   return (
     <Card title="Gerenciamento de Disciplinas" style={{ width: "100%" }}>
       <Row>
-        <Col align="center" span={8}>
+        <Col align="center" xs={8} sm={8} md={8} lg={8} xl={8}>
           <Button type="primary">Cadastrar Disciplina</Button>
         </Col>
-        <Col align="center" span={8}>
+        <Col align="center" xs={8} sm={8} md={8} lg={8} xl={8}>
           <Button type="primary">Alterar Disciplina</Button>
         </Col>
-        <Col align="center" span={8}>
+        <Col align="center" xs={8} sm={8} md={8} lg={8} xl={8}>
           <Button type="primary" danger>
             Deletar Disciplina
           </Button>

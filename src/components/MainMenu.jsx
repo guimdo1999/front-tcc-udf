@@ -10,14 +10,24 @@ import {
   BorderlessTableOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import { getMe } from "../Utils/Login";
+
 import AlunosMain from "../pages/Alunos/AlunosMain";
 import DisciplinasMain from "../pages/Disciplinas/DisciplinasMain";
 import ProfessoresMain from "../pages/Professores/ProfessoresMain";
 import TurmasMain from "../pages/Turmas/TurmasMain";
+import Home from "../pages/Home";
+import { cookies } from "../pages/Login/Login";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function MainMenu() {
+  const usuario_logado = getMe().then((data) => {
+    //const nome_usuario = data.cod_login;
+
+    console.log(data);
+  });
+
   return (
     <Layout>
       <Sider
@@ -40,27 +50,29 @@ function MainMenu() {
         <Header
           className="site-layout-sub-header-background"
           style={{ padding: 0 }}
-        />
+        >
+          <p>Olá </p>
+        </Header>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
           <Menu.Item key="0" icon={<BorderlessTableOutlined />}>
-            <Link to={`/`} />
+            <Link to={`/main/home`} />
             Home
           </Menu.Item>
           <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
-            <Link to={`/alunos`} />
+            <Link to={`/main/alunos`} />
             Alunos
           </Menu.Item>
           <Menu.Item key="2" icon={<VideoCameraOutlined />} href="/disciplinas">
-            <Link to={`/disciplinas`} />
+            <Link to={`/main/disciplinas`} />
             Disciplinas
           </Menu.Item>
           <Menu.Item key="3" icon={<UploadOutlined />}>
-            <Link to={`/professores`} />
+            <Link to={`/main/professores`} />
             Professores
           </Menu.Item>
           <Menu.Item key="4" icon={<TeamOutlined />}>
-            <Link to={`/turmas`} />
+            <Link to={`/main/turmas`} />
             Turmas
           </Menu.Item>
         </Menu>
@@ -73,16 +85,19 @@ function MainMenu() {
         <Content style={{ margin: "24px 16px 0" }}>
           {/* AQUI VÃO AS PAGES E SUAS ROTAS */}
           <Switch>
-            <Route path={`/alunos`}>
+            <Route path={`/main/home`}>
+              <Home />
+            </Route>
+            <Route path={`/main/alunos`}>
               <AlunosMain />
             </Route>
-            <Route path={`/disciplinas`}>
+            <Route path={`/main/disciplinas`}>
               <DisciplinasMain />
             </Route>
-            <Route path={`/professores`}>
+            <Route path={`/main/professores`}>
               <ProfessoresMain />
             </Route>
-            <Route path={`/turmas`}>
+            <Route path={`/main/turmas`}>
               <TurmasMain />
             </Route>
           </Switch>
