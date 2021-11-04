@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Card } from "antd";
+import { insertProfessor } from "../../Utils/Professor";
 
 function FormProfessor() {
   const layout = {
@@ -14,9 +15,13 @@ function FormProfessor() {
       number: "${label} não é um número válido!",
     },
   };
-  function onFinish() {
-    console.log("finished");
-  }
+
+  const onFinish = (values) => {
+    insertProfessor(values).then(() => {
+      alert(`Cadastrado o professor: ${values.nome_professor}`);
+    });
+  };
+
   return (
     <Card>
       <Form
@@ -26,7 +31,7 @@ function FormProfessor() {
         validateMessages={validateMessages}
       >
         <Form.Item
-          name={["user", "nome_professor"]}
+          name={"nome_professor"}
           label="Nome"
           rules={[{ required: true }]}
         >
@@ -34,28 +39,28 @@ function FormProfessor() {
         </Form.Item>
 
         <Form.Item
-          name={["user", "matricula"]}
+          name={"matricula"}
           label="Mátricula"
           rules={[{ type: "number", required: true }]}
         >
           <InputNumber style={{ width: "50%" }} />
         </Form.Item>
         <Form.Item
-          name={["user", "telefone"]}
+          name={"telefone"}
           label="Telefone"
           rules={[{ type: "number" }]}
         >
           <InputNumber style={{ width: "50%" }} placeholder="61987654321" />
         </Form.Item>
         <Form.Item
-          name={["user", "qtd_horas_trabalho"]}
+          name={"qtd_horas_trabalho"}
           label="Horas/Semana"
           rules={[{ type: "number" }]}
         >
           <InputNumber style={{ width: "50%" }} placeholder="40" />
         </Form.Item>
         <Form.Item
-          name={["user", "email_professor"]}
+          name={"email_professor"}
           label="E-mail"
           rules={[{ type: "email" }]}
         >

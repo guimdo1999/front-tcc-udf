@@ -1,13 +1,5 @@
 import * as backEndUtils from "./BackEnd";
 
-export const Login = (dados) => {
-  return {
-    cod_login: dados.cod_login.valor,
-    cod_senha: dados.cod_senha.valor,
-    cod_perfil: dados.cod_perfil.valor,
-  };
-};
-
 export const register = async (cod_login, cod_senha, cod_perfil) => {
   const registrar_usuario = {
     cod_login: cod_login,

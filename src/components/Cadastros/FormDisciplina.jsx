@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Card } from "antd";
+import { insertDisciplina } from "../../Utils/Disciplina";
 
 function FormDisciplina() {
   const layout = {
@@ -14,9 +15,11 @@ function FormDisciplina() {
       number: "${label} não é um número válido!",
     },
   };
-  function onFinish() {
-    console.log("finished");
-  }
+  const onFinish = (values) => {
+    insertDisciplina(values).then(() => {
+      alert(`Cadastrado a disciplina: ${values.nome_disciplina}`);
+    });
+  };
   return (
     <Card>
       <Form
@@ -26,14 +29,14 @@ function FormDisciplina() {
         validateMessages={validateMessages}
       >
         <Form.Item
-          name={["disciplina", "nome_disciplina"]}
+          name={"nome_disciplina"}
           label="Tipo de Ensino"
           rules={[{ required: true }]}
         >
           <Input placeholder="Ex: Matemática" />
         </Form.Item>
         <Form.Item
-          name={["disciplina", "aula_exclusiva"]}
+          name={"aula_exclusiva"}
           label="Aula exclusiva"
           rules={[{ required: true }]}
         >
@@ -41,14 +44,14 @@ function FormDisciplina() {
         </Form.Item>
 
         <Form.Item
-          name={["disciplina", "qtd_carga_horária"]}
+          name={"qtd_carga_horaria"}
           label="Carga Horária"
           rules={[{ type: "number", required: true }]}
         >
           <InputNumber style={{ width: "50%" }} />
         </Form.Item>
         <Form.Item
-          name={["disciplina", "qtd_aulas"]}
+          name={"qtd_aulas"}
           label="Quantia de Aulas"
           rules={[{ type: "number", required: true }]}
         >

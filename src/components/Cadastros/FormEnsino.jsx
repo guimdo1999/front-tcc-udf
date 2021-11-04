@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Card } from "antd";
+import { insertTipo_ensino } from "../../Utils/TipoEnsino";
 
 function FormTurma() {
   const layout = {
@@ -11,9 +12,11 @@ function FormTurma() {
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
   };
-  function onFinish() {
-    console.log("finished");
-  }
+  const onFinish = (values) => {
+    insertTipo_ensino(values).then(() => {
+      alert(`Cadastrado o tipo de ensino: ${values.nome_tipo_ensino}`);
+    });
+  };
   return (
     <Card>
       <Form
@@ -23,7 +26,7 @@ function FormTurma() {
         validateMessages={validateMessages}
       >
         <Form.Item
-          name={["ensino", "nome_tipo_ensino"]}
+          name={"nome_tipo_ensino"}
           label="Tipo de Ensino"
           rules={[{ required: true }]}
         >

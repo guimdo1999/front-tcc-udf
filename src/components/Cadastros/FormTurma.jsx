@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Card } from "antd";
+import { insertTurma } from "../../Utils/Turma";
 
 function FormTurma() {
   const layout = {
@@ -15,9 +16,11 @@ function FormTurma() {
       number: "${label} não é um número válido!",
     },
   };
-  function onFinish() {
-    console.log("finished");
-  }
+  const onFinish = (values) => {
+    insertTurma(values).then(() => {
+      alert(`Cadastrado o tipo de ensino: ${values.nome_turma}`);
+    });
+  };
   return (
     <Card>
       <Form
@@ -27,7 +30,7 @@ function FormTurma() {
         validateMessages={validateMessages}
       >
         <Form.Item
-          name={["user", "nome_turma"]}
+          name={"nome_turma"}
           label="Nome Turma"
           rules={[{ required: true }]}
         >
@@ -35,21 +38,21 @@ function FormTurma() {
         </Form.Item>
 
         <Form.Item
-          name={["user", "ano_turma"]}
+          name={"ano_turma"}
           label="Ano da Turma"
           rules={[{ type: "number", required: true }]}
         >
           <InputNumber style={{ width: "50%" }} />
         </Form.Item>
         <Form.Item
-          name={["user", "qtd_meses"]}
+          name={"qtd_meses"}
           label="Quantia Meses"
           rules={[{ type: "number", required: true }]}
         >
           <InputNumber style={{ width: "50%" }} placeholder="6" />
         </Form.Item>
         <Form.Item
-          name={["user", "tipo_de_calendario"]}
+          name={"tipo_de_calendario"}
           label="Tipo de calendário"
           rules={[{ required: true }]}
         >
