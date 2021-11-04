@@ -11,12 +11,8 @@ export const cookies = new Cookies();
 const Login = () => {
   const history = useHistory();
   const onFinish = (values) => {
-    console.log("Received values of form", values);
-
-    const usuario = login(values.cod_login, values.cod_senha).then((data) => {
+    login(values.cod_login, values.cod_senha).then((data) => {
       cookies.set("auth_token", data.authToken.token, { path: "/" });
-
-      console.log(data);
       history.push("/main/home");
     });
   };

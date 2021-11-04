@@ -9,7 +9,7 @@ import {
   Card,
 } from "antd";
 
-function CadastroFormAluno() {
+function FormAluno() {
   const layout = {
     labelCol: { span: 3 },
     wrapperCol: { span: 9 },
@@ -22,9 +22,6 @@ function CadastroFormAluno() {
     types: {
       email: "${label} não é um e-mail válido!",
       number: "${label} não é um número válido!",
-    },
-    number: {
-      range: "${label} deve ser entre ${min} and ${max}",
     },
   };
   function onFinish() {
@@ -39,7 +36,7 @@ function CadastroFormAluno() {
         validateMessages={validateMessages}
       >
         <Form.Item
-          name={["user", "nom_aluno"]}
+          name={["user", "nome_aluno"]}
           label="Nome"
           rules={[{ required: true }]}
         >
@@ -62,21 +59,21 @@ function CadastroFormAluno() {
         </Form.Item>
 
         <Form.Item
-          name={["user", "num_matricula"]}
+          name={["user", "matricula"]}
           label="Mátricula"
           rules={[{ type: "number", required: true }]}
         >
           <InputNumber style={{ width: "50%" }} />
         </Form.Item>
         <Form.Item
-          name={["user", "num_telefone"]}
+          name={["user", "telefone"]}
           label="Telefone"
           rules={[{ type: "number" }]}
         >
           <InputNumber style={{ width: "50%" }} placeholder="61981234567" />
         </Form.Item>
         <Form.Item
-          name={["user", "nom_email_aluno"]}
+          name={["user", "email"]}
           label="E-mail"
           rules={[{ type: "email" }]}
         >
@@ -93,4 +90,4 @@ function CadastroFormAluno() {
   );
 }
 
-export default CadastroFormAluno;
+export default FormAluno;

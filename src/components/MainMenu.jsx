@@ -1,8 +1,8 @@
-import React from "react";
-import "./estilo.css";
-import { Link, Switch, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import "./estiloMenu.css";
+import { Link, Switch, Route, useHistory } from "react-router-dom";
 
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import {
   UploadOutlined,
   UserOutlined,
@@ -10,7 +10,7 @@ import {
   BorderlessTableOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { getMe } from "../Utils/Login";
+import { getMe, logout } from "../Utils/Login";
 
 import AlunosMain from "../pages/Alunos/AlunosMain";
 import DisciplinasMain from "../pages/Disciplinas/DisciplinasMain";
@@ -22,11 +22,21 @@ import { cookies } from "../pages/Login/Login";
 const { Header, Content, Footer, Sider } = Layout;
 
 function MainMenu() {
-  const usuario_logado = getMe().then((data) => {
-    //const nome_usuario = data.cod_login;
+  const history = useHistory();
+  const [nomeUsuario, setNomeUsuario] = useState("");
+  useEffect(() => {
+    getMe().then((data) => {
+      setNomeUsuario(data.cod_login);
+      console.log(data);
+    });
+  }, []);
 
-    console.log(data);
-  });
+  const Logout = () => {
+    logout().then(() => {
+      cookies.remove("auth_token");
+      history.push("/");
+    });
+  };
 
   return (
     <Layout>
@@ -51,7 +61,7 @@ function MainMenu() {
           className="site-layout-sub-header-background"
           style={{ padding: 0 }}
         >
-          <p>Olá </p>
+          <p>Olá {nomeUsuario}</p>
         </Header>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
@@ -74,6 +84,11 @@ function MainMenu() {
           <Menu.Item key="4" icon={<TeamOutlined />}>
             <Link to={`/main/turmas`} />
             Turmas
+          </Menu.Item>
+          <Menu.Item key="5">
+            <Button type="primary" danger onClick={Logout}>
+              Logout
+            </Button>
           </Menu.Item>
         </Menu>
       </Sider>

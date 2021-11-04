@@ -2,11 +2,11 @@ import React from "react";
 
 import { Button, Card, Col, Row } from "antd";
 import UseVisibilityToggler from "../../hooks/useVisibilityToggler";
-import CadastroFormAluno from "../../components/Alunos/CadastroFormAluno";
+import FormAluno from "../../components/Cadastros/FormAluno";
 
 function AlunosMain() {
   const [CadastroAlunoForm, toggleVisibility] = UseVisibilityToggler(
-    <CadastroFormAluno />,
+    <FormAluno />,
     false
   );
 

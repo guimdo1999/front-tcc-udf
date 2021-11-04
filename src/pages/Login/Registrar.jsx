@@ -7,15 +7,14 @@ import { register } from "../../Utils/Login";
 const Registrar = () => {
   const history = useHistory();
   const onFinish = (values) => {
-    console.log("Received values of form", values);
-    const registrar_usuario = register(
-      values.cod_login,
-      values.cod_senha,
-      "0"
-    ).then((data) => {
-      console.log(`${data}`);
-      history.push("/");
-    });
+    if (values.cod_senha !== values.cod_senha2) {
+      alert("Senhas não coincidem!");
+    } else {
+      register(values.cod_login, values.cod_senha, "0").then((data) => {
+        console.log(`${data}`);
+        history.push("/");
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -62,9 +61,13 @@ const Registrar = () => {
               <Input.Password />
             </Form.Item>
             <Form.Item
-              label="Confirmar senha"
+              label="Confirme a senha"
+              name="cod_senha2"
               rules={[
-                { required: true, message: "Por favor, insira sua senha!" },
+                {
+                  required: true,
+                  message: "Por favor, insira sua senha novamente!",
+                },
               ]}
             >
               <Input.Password />

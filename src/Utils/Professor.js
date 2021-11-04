@@ -1,35 +1,35 @@
 import * as backEndUtils from "./BackEnd";
 
-export const Login = (dados) => {
-  return {
-    cod_login: dados.cod_login.valor,
-    cod_senha: dados.cod_senha.valor,
-    cod_perfil: dados.cod_perfil.valor,
-  };
-};
-
-export const register = async (cod_login, cod_senha, cod_perfil) => {
-  const registrar_usuario = {
-    cod_login: cod_login,
-    cod_senha: cod_senha,
-    cod_perfil: cod_perfil,
+export const register = async (
+  nome_professor,
+  qtd_horas_trabalho,
+  matricula,
+  telefone,
+  email_professor
+) => {
+  const registrar_professor = {
+    nome_professor: nome_professor,
+    qtd_horas_trabalho: qtd_horas_trabalho,
+    matricula: matricula,
+    telefone: telefone,
+    email_professor: email_professor,
   };
   return await backEndUtils
-    .chamarBackEnd("POST", "/register", registrar_usuario)
+    .chamarBackEnd("POST", "/create", registrar_professor)
     .then((resposta) => {
       return resposta.json().then((data) => data);
     });
 };
 
-export const login = async (cod_login, cod_senha) => {
-  const usuario = { cod_login: cod_login, cod_senha: cod_senha };
+export const login = async (nome_professor, qtd_horas_trabalho) => {
+  const usuario = { nome_professor: nome_professor, cod_senha: cod_senha };
   return await backEndUtils
     .chamarBackEnd("POST", "/login", usuario)
     .then((resposta) => {
       return resposta.json().then((data) => data);
     });
 };
-export const logout = async () => {
+/* export const logout = async () => {
   return await backEndUtils
     .chamarBackEnd("DELETE", "/logout")
     .then(() => {
@@ -44,4 +44,4 @@ export const getMe = async () => {
   return await backEndUtils.chamarBackEnd("GET", "/me").then((resposta) => {
     return resposta.json().then((data) => data);
   });
-};
+}; */
