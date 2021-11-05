@@ -3,10 +3,15 @@ import React from "react";
 import { Button, Card, Col, Row } from "antd";
 import FormDisciplina from "../../components/Cadastros/FormDisciplina";
 import UseVisibilityToggler from "../../hooks/useVisibilityToggler";
+import SelectFunction from "../../components/Select/SelectFunction";
 
 function DisciplinasMain() {
   const [CadastroDisciplinaForm, toggleVisibility] = UseVisibilityToggler(
     <FormDisciplina />,
+    false
+  );
+  const [DisciplinaSelect, toggleVisibilityBusca] = UseVisibilityToggler(
+    <SelectFunction expr="disciplina" />,
     false
   );
   return (
@@ -19,7 +24,9 @@ function DisciplinasMain() {
             </Button>
           </Col>
           <Col align="center" xs={8} sm={8} md={8} lg={8} xl={8}>
-            <Button type="primary">Alterar Disciplina</Button>
+            <Button type="primary" onClick={toggleVisibilityBusca}>
+              Alterar Disciplina
+            </Button>
           </Col>
           <Col align="center" xs={8} sm={8} md={8} lg={8} xl={8}>
             <Button type="primary" danger>
@@ -29,6 +36,7 @@ function DisciplinasMain() {
         </Row>
       </Card>
       {CadastroDisciplinaForm}
+      {DisciplinaSelect}
     </>
   );
 }

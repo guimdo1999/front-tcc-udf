@@ -8,6 +8,7 @@ function FormProfessor() {
     wrapperCol: { span: 9 },
   };
 
+  /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
     types: {

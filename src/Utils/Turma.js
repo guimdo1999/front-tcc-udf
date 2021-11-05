@@ -13,3 +13,11 @@ export const insertTurma = async (dados) => {
       return resposta.json().then((data) => data);
     });
 };
+
+export const getTurma = async () => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/turma")
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};

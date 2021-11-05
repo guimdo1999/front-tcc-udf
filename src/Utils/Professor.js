@@ -14,3 +14,11 @@ export const insertProfessor = async (dados) => {
       return resposta.json().then((data) => data);
     });
 };
+
+export const getProfessor = async () => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/professor")
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};

@@ -13,3 +13,11 @@ export const insertDisciplina = async (dados) => {
       return resposta.json().then((data) => data);
     });
 };
+
+export const getDisciplina = async () => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/disciplina")
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};

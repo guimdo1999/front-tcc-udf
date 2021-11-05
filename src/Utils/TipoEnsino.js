@@ -10,3 +10,11 @@ export const insertTipo_ensino = async (dados) => {
       return resposta.json().then((data) => data);
     });
 };
+
+export const getTipo_ensino = async () => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/tipo_ensino")
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};

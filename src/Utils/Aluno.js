@@ -15,3 +15,18 @@ export const insertAluno = async (dados) => {
       return resposta.json().then((data) => data);
     });
 };
+
+export const getAluno = async () => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/aluno")
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};
+export const getAlunoId = async (req) => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/aluno/:id")
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};
