@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Input, InputNumber, Button } from "antd";
-import { insertProfessor } from "../../Utils/Professor";
+import { putProfessorId } from "../../Utils/Professor";
 
-function FormProfessor() {
+function UpdateProfessor({ professor, handleOk }) {
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 9 },
@@ -11,15 +11,12 @@ function FormProfessor() {
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
-    types: {
-      email: "${label} não é um e-mail válido!",
-      number: "${label} não é um número válido!",
-    },
   };
 
   const onFinish = (values) => {
-    insertProfessor(values).then(() => {
+    putProfessorId(values).then(() => {
       alert(`Cadastrado o professor: ${values.nome_professor}`);
+      handleOk();
     });
   };
 
@@ -29,6 +26,13 @@ function FormProfessor() {
       name="nest-messages"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      initialValues={{
+        nome_professor: professor.nome_professor,
+        qtd_horas_trabalho: professor.qtd_horas_trabalho,
+        matricula: professor.matricula,
+        telefone: professor.telefone,
+        email_professor: professor.email_professor,
+      }}
     >
       <Form.Item
         name={"nome_professor"}
@@ -43,28 +47,20 @@ function FormProfessor() {
         label="Mátricula"
         rules={[{ type: "number", required: true }]}
       >
-        <InputNumber />
+        <InputNumber style={{ width: "100%" }} />
       </Form.Item>
-      <Form.Item
-        name={"telefone"}
-        label="Telefone"
-        rules={[{ type: "number" }]}
-      >
-        <InputNumber placeholder="61987654321" />
+      <Form.Item name={"telefone"} label="Telefone">
+        <InputNumber style={{ width: "100%" }} placeholder="61987654321" />
       </Form.Item>
-      <Form.Item
-        name={"qtd_horas_trabalho"}
-        label="Horas/Semana"
-        rules={[{ type: "number" }]}
-      >
-        <InputNumber placeholder="40" />
+      <Form.Item name={"qtd_horas_trabalho"} label="Horas/Semana">
+        <InputNumber style={{ width: "100%" }} placeholder="40" />
       </Form.Item>
       <Form.Item
         name={"email_professor"}
         label="E-mail"
         rules={[{ type: "email" }]}
       >
-        <Input placeholder="email@email.com" />
+        <Input style={{ width: "100%" }} placeholder="email@email.com" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 18 }}>
@@ -76,4 +72,4 @@ function FormProfessor() {
   );
 }
 
-export default FormProfessor;
+export default UpdateProfessor;

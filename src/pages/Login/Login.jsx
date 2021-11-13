@@ -10,6 +10,7 @@ export const cookies = new Cookies();
 
 const Login = () => {
   const history = useHistory();
+
   const onFinish = (values) => {
     login(values.cod_login, values.cod_senha).then((data) => {
       cookies.set("auth_token", data.authToken.token, { path: "/" });

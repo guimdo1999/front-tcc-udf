@@ -32,8 +32,35 @@ export const logout = async () => {
     });
 };
 
+export const putUsuario = async (id, data) => {
+  const usuario = {
+    cod_login: data.cod_login,
+    cod_senha: data.cod_senha,
+    cod_perfil: data.cod_perfil,
+  };
+  return await backEndUtils
+    .chamarBackEnd("PUT", "/" + id, usuario)
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};
+
 export const getMe = async () => {
   return await backEndUtils.chamarBackEnd("GET", "/me").then((resposta) => {
     return resposta.json().then((data) => data);
   });
+};
+
+export const getUsuarios = async () => {
+  return await backEndUtils.chamarBackEnd("GET", "/").then((resposta) => {
+    return resposta.json().then((data) => data);
+  });
+};
+
+export const deleteUsuario = async (id) => {
+  return await backEndUtils
+    .chamarBackEnd("DELETE", "/" + id)
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
 };

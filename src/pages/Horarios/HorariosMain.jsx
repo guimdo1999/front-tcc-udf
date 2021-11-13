@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import { Alert, Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
+import FormHorario from "../../components/Cadastros/FormHorario";
 
-import { deleteProfessor, getProfessor } from "../../Utils/Professor";
-import FormProfessor from "../../components/Cadastros/FormProfessor";
-import UpdateProfessor from "../../components/Update/UpdateProfessor";
+import { deleteHorario, getHorario } from "../../Utils/Horario";
+import UpdateHorario from "../../components/Update/UpdateHorario";
 
-function ProfessoresMain() {
+function HorariosMain() {
   const [busca, setBusca] = useState([]);
-  const [professor, setprofessor] = useState();
+  const [horario, setHorario] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
 
@@ -32,7 +32,7 @@ function ProfessoresMain() {
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
-      getProfessor().then((data) => {
+      getHorario().then((data) => {
         setBusca(data);
         setReload(false);
       });
@@ -41,54 +41,49 @@ function ProfessoresMain() {
 
   const columns = [
     {
-      title: "Nome do professor",
-      dataIndex: "nome_professor",
-      key: "nome_professor",
+      title: "Nome do horário",
+      dataIndex: "nome_horario",
+      key: "nome_horario",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_professor.localeCompare(b.nome_professor),
+      sorter: (a, b) => a.nome_horario.localeCompare(b.nome_horario),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Mátricula",
-      dataIndex: "matricula",
-      key: "matricula",
+      title: "Início do horário",
+      dataIndex: "hora_inicio",
+      key: "hora_inicio",
     },
     {
-      title: "Telefone",
-      dataIndex: "telefone",
-      key: "telefone",
+      title: "Fim do horário",
+      dataIndex: "hora_fim",
+      key: "hora_fim",
     },
     {
-      title: "Horas trabalhadas por semana",
-      dataIndex: "qtd_horas_trabalho",
-      key: "qtd_horas_trabalho",
-    },
-    {
-      title: "Email",
-      dataIndex: "email_professor",
-      key: "email_professor",
+      title: "Quantia de Aulas Semanais",
+      dataIndex: "qtd_aulas",
+      key: "qtd_aulas",
     },
     {
       title: "Ações",
-      key: "id_professor",
+      key: "id_disciplina",
       render: (record) => (
         <Space size="middle">
           <Button
             type="primary"
             onClick={() => {
               //console.log(record);
-              setprofessor(record);
+              setHorario(record);
               setModalContent(
                 <Modal
-                  title={`Editando a professor: ${record.nome_professor}`}
+                  title={`Editando a Horario: ${record.nome_horario}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateProfessor professor={professor} handleOk={handleOk} />
+                  <UpdateHorario horario={horario} handleOk={handleOk} />
                 </Modal>
               );
 
@@ -103,22 +98,20 @@ function ProfessoresMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Deletando a professor: ${record.nome_professor}`}
+                  title={`Deletando a horario: ${record.nome_horario}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
                   <h3>
-                    Gostaria mesmo de deletar a professor{" "}
-                    {record.nome_professor}?
+                    Gostaria mesmo de deletar a horario {record.nome_horario}?
                   </h3>
                   <Button
                     type="primary"
                     danger
                     onClick={() => {
-                      deleteProfessor(record.id_professor).then(() => {
-                        <Alert message="Success Text" type="success" />;
-                        alert(`Deletado o professor: ${record.nome_professor}`);
+                      deleteHorario(record.id_horario).then(() => {
+                        alert(`Deletado o horario: ${record.nome_horario}`);
 
                         handleOk();
                       });
@@ -138,39 +131,39 @@ function ProfessoresMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Professores" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Horario" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando novo professor:`}
+                title={`Cadastrando novo horario:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormProfessor handleOk={handleOk} />
+                <FormHorario handleOk={handleOk} />
               </Modal>
             );
 
             setVisible(true);
           }}
         >
-          Cadastrar Professor
+          Cadastrar Horario
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por professor"
+        placeholder="Pesquisar por Horario"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_professor.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_disciplina.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -206,4 +199,4 @@ function ProfessoresMain() {
   );
 }
 
-export default ProfessoresMain;
+export default HorariosMain;

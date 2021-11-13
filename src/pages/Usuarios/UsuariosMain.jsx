@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import { Alert, Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import { deleteProfessor, getProfessor } from "../../Utils/Professor";
-import FormProfessor from "../../components/Cadastros/FormProfessor";
-import UpdateProfessor from "../../components/Update/UpdateProfessor";
+import { deleteUsuario, getMe, getUsuarios } from "../../Utils/Login";
+import UpdateUsuario from "../../components/Update/UpdateUsuario";
 
-function ProfessoresMain() {
+function UsuariosMain() {
   const [busca, setBusca] = useState([]);
-  const [professor, setprofessor] = useState();
+  const [usuario, setUsuario] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const [nomeUser, setNomeUser] = useState("");
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
@@ -31,64 +31,53 @@ function ProfessoresMain() {
   /**/
 
   useEffect(() => {
-    if (valueF === "" || reload === true) {
-      getProfessor().then((data) => {
-        setBusca(data);
-        setReload(false);
-      });
-    }
+    getMe().then((data1) => {
+      setNomeUser(data1.cod_login);
+      if (valueF === "" || reload === true) {
+        getUsuarios().then((data) => {
+          setBusca(data);
+
+          setReload(false);
+        });
+      }
+    });
   }, [valueF || reload]);
 
   const columns = [
     {
-      title: "Nome do professor",
-      dataIndex: "nome_professor",
-      key: "nome_professor",
+      title: "Nome de login",
+      dataIndex: "cod_login",
+      key: "cod_login",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_professor.localeCompare(b.nome_professor),
+      sorter: (a, b) => a.cod_login.localeCompare(b.cod_login),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Mátricula",
-      dataIndex: "matricula",
-      key: "matricula",
-    },
-    {
-      title: "Telefone",
-      dataIndex: "telefone",
-      key: "telefone",
-    },
-    {
-      title: "Horas trabalhadas por semana",
-      dataIndex: "qtd_horas_trabalho",
-      key: "qtd_horas_trabalho",
-    },
-    {
-      title: "Email",
-      dataIndex: "email_professor",
-      key: "email_professor",
+      title: "Código de Perfil",
+      dataIndex: "cod_perfil",
+      key: "cod_perfil",
     },
     {
       title: "Ações",
-      key: "id_professor",
+      key: "cod_login",
       render: (record) => (
         <Space size="middle">
           <Button
             type="primary"
             onClick={() => {
               //console.log(record);
-              setprofessor(record);
+              setUsuario(record);
               setModalContent(
                 <Modal
-                  title={`Editando a professor: ${record.nome_professor}`}
+                  title={`Editando o usuario: ${record.cod_login}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateProfessor professor={professor} handleOk={handleOk} />
+                  <UpdateUsuario usuario={usuario} handleOk={handleOk} />
                 </Modal>
               );
 
@@ -103,22 +92,20 @@ function ProfessoresMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Deletando a professor: ${record.nome_professor}`}
+                  title={`Deletando o usuario: ${record.cod_login}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
                   <h3>
-                    Gostaria mesmo de deletar a professor{" "}
-                    {record.nome_professor}?
+                    Gostaria mesmo de deletar o usuario {record.cod_login}?
                   </h3>
                   <Button
                     type="primary"
                     danger
                     onClick={() => {
-                      deleteProfessor(record.id_professor).then(() => {
-                        <Alert message="Success Text" type="success" />;
-                        alert(`Deletado o professor: ${record.nome_professor}`);
+                      deleteUsuario(record.cod_login).then(() => {
+                        alert(`Deletado o usuario: ${record.cod_login}`);
 
                         handleOk();
                       });
@@ -138,39 +125,26 @@ function ProfessoresMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Professores" style={{ width: "100%" }}>
-      <Row>
-        <Button
-          type="primary"
-          onClick={() => {
-            setModalContent(
-              <Modal
-                title={`Cadastrando novo professor:`}
-                visible={visible}
-                onCancel={handleCancel}
-                footer={null}
-              >
-                <FormProfessor handleOk={handleOk} />
-              </Modal>
-            );
-
-            setVisible(true);
-          }}
-        >
-          Cadastrar Professor
-        </Button>
-      </Row>
+    <Card title="Gerenciamento de Usuários" style={{ width: "100%" }}>
       <br></br>
       <br></br>
       {modalContent}
+      <p
+        style={{
+          width: "45%",
+          float: "left",
+        }}
+      >
+        Cuidado com seu próprio usuário.
+      </p>
       <Search
-        placeholder="Pesquisar por professor"
+        placeholder="Pesquisar por usuário"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_professor.toLocaleLowerCase().includes(valorAtual)
+            entry.cod_login.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -206,4 +180,4 @@ function ProfessoresMain() {
   );
 }
 
-export default ProfessoresMain;
+export default UsuariosMain;

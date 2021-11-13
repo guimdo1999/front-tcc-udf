@@ -30,7 +30,7 @@ import SubMenu from "antd/lib/menu/SubMenu";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-function MainMenu() {
+function ManagerMenu() {
   const [nomeUsuario, setNomeUsuario] = useState("");
   const history = useHistory();
   useEffect(() => {
@@ -41,8 +41,8 @@ function MainMenu() {
           case "Usuário":
             history.push("/home");
             break;
-          case "Gerente":
-            history.push("/gerente");
+          case "Admin":
+            history.push("/main/home");
             break;
         }
       })
@@ -94,11 +94,11 @@ function MainMenu() {
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["0"]}>
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
           <Menu.Item key="0" icon={<BorderlessTableOutlined />}>
-            <Link to={`/main/home`} />
+            <Link to={`/gerente/home`} />
             Home
           </Menu.Item>
           <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
-            <Link to={`/main/alunos`} />
+            <Link to={`/gerente/alunos`} />
             Alunos
           </Menu.Item>
           <SubMenu key="subLeciona" title="Ensino" icon={<FormOutlined />}>
@@ -107,29 +107,25 @@ function MainMenu() {
               icon={<VideoCameraOutlined />}
               href="/disciplinas"
             >
-              <Link to={`/main/disciplinas`} />
+              <Link to={`/gerente/disciplinas`} />
               Disciplinas
             </Menu.Item>
             <Menu.Item key="3" icon={<UploadOutlined />}>
-              <Link to={`/main/professores`} />
+              <Link to={`/gerente/professores`} />
               Professores
             </Menu.Item>
             <Menu.Item key="8" icon={<UploadOutlined />}>
-              <Link to={`/main/professores`} />
+              <Link to={`/gerente/professores`} />
               Leciona
             </Menu.Item>
           </SubMenu>
           <Menu.Item key="4" icon={<TeamOutlined />}>
-            <Link to={`/main/turmas`} />
+            <Link to={`/gerente/turmas`} />
             Turmas
           </Menu.Item>
           <Menu.Item key="5" icon={<FieldTimeOutlined />}>
-            <Link to={`/main/horarios`} />
+            <Link to={`/gerente/horarios`} />
             Horários
-          </Menu.Item>
-          <Menu.Item key="6" icon={<UserSwitchOutlined />}>
-            <Link to={`/main/usuarios`} />
-            Gerenciar Usuários
           </Menu.Item>
         </Menu>
       </Sider>
@@ -150,26 +146,23 @@ function MainMenu() {
         <Content style={{ margin: "24px 16px 0" }}>
           {/* AQUI VÃO AS PAGES E SUAS ROTAS */}
           <Switch>
-            <Route path={`/main/home`}>
+            <Route path={`/gerente/home`}>
               <Home />
             </Route>
-            <Route path={`/main/alunos`}>
+            <Route path={`/gerente/alunos`}>
               <AlunosMain />
             </Route>
-            <Route path={`/main/disciplinas`}>
+            <Route path={`/gerente/disciplinas`}>
               <DisciplinasMain />
             </Route>
-            <Route path={`/main/professores`}>
+            <Route path={`/gerente/professores`}>
               <ProfessoresMain />
             </Route>
-            <Route path={`/main/turmas`}>
+            <Route path={`/gerente/turmas`}>
               <TurmasMain />
             </Route>
-            <Route path={`/main/horarios`}>
+            <Route path={`/gerente/horarios`}>
               <HorariosMain />
-            </Route>
-            <Route path={`/main/usuarios`}>
-              <UsuariosMain />
             </Route>
           </Switch>
         </Content>
@@ -183,4 +176,4 @@ function MainMenu() {
   );
 }
 
-export default MainMenu;
+export default ManagerMenu;

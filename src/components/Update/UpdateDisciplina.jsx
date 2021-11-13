@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Select } from "antd";
-import { insertDisciplina } from "../../Utils/Disciplina";
+import { putDisciplinaId } from "../../Utils/Disciplina";
 
-function FormDisciplina({ handleOk }) {
+function UpdateDisciplina({ disciplina, handleOk }) {
   const layout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 9 },
@@ -16,7 +16,7 @@ function FormDisciplina({ handleOk }) {
     },
   };
   const onFinish = (values) => {
-    insertDisciplina(values).then(() => {
+    putDisciplinaId(disciplina.id_disciplina, values).then(() => {
       alert(`Cadastrado a disciplina: ${values.nome_disciplina}`);
       handleOk();
     });
@@ -27,37 +27,32 @@ function FormDisciplina({ handleOk }) {
       name="nest-messages"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      initialValues={{
+        nome_disciplina: disciplina.nome_disciplina,
+        aula_exclusiva: disciplina.aula_exclusiva,
+        qtd_carga_horaria: disciplina.qtd_carga_horaria,
+        qtd_aulas: disciplina.qtd_aulas,
+      }}
     >
       <Form.Item
         name={"nome_disciplina"}
-        label="Tipo de Ensino"
+        label="Disciplina"
         rules={[{ required: true }]}
       >
         <Input placeholder="Ex: Matemática" />
       </Form.Item>
-      <Form.Item
-        name={"aula_exclusiva"}
-        label="Aula exclusiva"
-        rules={[{ required: true }]}
-      >
+      <Form.Item name={"aula_exclusiva"} label="Aula exclusiva">
         <Select style={{ width: "100%" }} placeholder="Selecione sim ou não.">
           <Select.Option value="Sim">Sim</Select.Option>
           <Select.Option value="Não">Não</Select.Option>
         </Select>
       </Form.Item>
 
-      <Form.Item
-        name={"qtd_carga_horaria"}
-        label="Carga Horária"
-        rules={[{ type: "number", required: true }]}
-      >
+      <Form.Item name={"qtd_carga_horaria"} label="Carga Horária">
         <InputNumber style={{ width: "100%" }} />
       </Form.Item>
-      <Form.Item
-        name={"qtd_aulas"}
-        label="Quantia de Aulas"
-        rules={[{ type: "number", required: true }]}
-      >
+
+      <Form.Item name={"qtd_aulas"} label="Quantia de Aulas">
         <InputNumber style={{ width: "100%" }} />
       </Form.Item>
 
@@ -70,4 +65,4 @@ function FormDisciplina({ handleOk }) {
   );
 }
 
-export default FormDisciplina;
+export default UpdateDisciplina;

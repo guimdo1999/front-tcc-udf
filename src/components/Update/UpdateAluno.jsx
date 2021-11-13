@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
-import { insertAluno } from "../../Utils/Aluno";
+import { putAlunoId } from "../../Utils/Aluno";
 
-function FormAluno({ handleOk }) {
+function UpdateAluno({ aluno, handleOk }) {
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 9 },
@@ -12,17 +12,13 @@ function FormAluno({ handleOk }) {
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
-    types: {
-      email: "${label} não é um e-mail válido!",
-      number: "${label} não é um número válido!",
-    },
   };
 
   const onFinish = (values) => {
     values.data_nascimento = values.data_nascimento.toISOString().split("T")[0];
 
-    insertAluno(values).then(() => {
-      alert(`Cadastrado o aluno: ${values.nome_aluno}`);
+    putAlunoId(aluno.id_aluno, values).then(() => {
+      alert(`Atualizado o aluno: ${values.nome_aluno}`);
       handleOk();
     });
   };
@@ -30,12 +26,21 @@ function FormAluno({ handleOk }) {
   return (
     <Form
       {...layout}
-      name="nest-messages"
+      name="update-aluno"
+      id="update-aluno"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      initialValues={{
+        nome_aluno: aluno.nome_aluno,
+        //data_nascimento: new Date(aluno.data_nascimento),
+        sexo: aluno.sexo,
+        matricula: aluno.matricula,
+        telefone: aluno.telefone,
+        email: aluno.email,
+      }}
     >
       <Form.Item name={"nome_aluno"} label="Nome" rules={[{ required: true }]}>
-        <Input placeholder="EX: Rogério Silva de Souza" />
+        <Input placeholder="EX: Lúcifer" />
       </Form.Item>
 
       <Form.Item label="Sexo" name={"sexo"} required>
@@ -72,12 +77,12 @@ function FormAluno({ handleOk }) {
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 18 }}>
-        <Button type="primary" htmlType="submit">
-          Enviar
+        <Button type="primary" htmlType="submit" style={{ marginLeft: "10px" }}>
+          Atualizar
         </Button>
       </Form.Item>
     </Form>
   );
 }
 
-export default FormAluno;
+export default UpdateAluno;
