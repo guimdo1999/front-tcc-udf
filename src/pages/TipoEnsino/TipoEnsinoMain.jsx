@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import FormTurma from "../../components/Cadastros/FormTurma";
+import FormTipoEnsino from "../../components/Cadastros/FormTipoEnsino";
 
-import UpdateTurma from "../../components/Update/UpdateTurma";
-import { deleteTurma, getTurma } from "../../Utils/Turma";
+import { deleteTipo_ensino, getTipo_ensino } from "../../Utils/TipoEnsino";
+import UpdateTipoEnsino from "../../components/Update/UpdateTipoEnsino";
 
-function TurmasMain() {
+function TipoEnsinoMain() {
   const [busca, setBusca] = useState([]);
-  const [turma, setTurma] = useState();
+  const [tipoEnsino, setTipoEnsino] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
 
@@ -33,7 +33,7 @@ function TurmasMain() {
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
-      getTurma().then((data) => {
+      getTipo_ensino().then((data) => {
         setBusca(data);
         setReload(false);
       });
@@ -42,30 +42,20 @@ function TurmasMain() {
 
   const columns = [
     {
-      title: "Nome da Turma",
-      dataIndex: "nome_turma",
-      key: "nome_turma",
+      title: "Nome do Tipo de Ensino",
+      dataIndex: "nome_tipo_ensino",
+      key: "nome_tipo_ensino",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_turma.localeCompare(b.nome_turma),
+      sorter: (a, b) => a.nome_tipo_ensino.localeCompare(b.nome_tipo_ensino),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Ano da Turma",
-      dataIndex: "ano_turma",
-      key: "ano_turma",
-    },
-    {
-      title: "Quantidade de Meses",
-      dataIndex: "qtd_meses",
-      key: "qtd_meses",
-    },
-    {
-      title: "Tipo de Calendário",
-      dataIndex: "tipo_de_calendario",
-      key: "tipo_de_calendario",
+      title: "Está ativo?",
+      dataIndex: "is_active",
+      key: "is_active",
     },
     {
       title: "Ações",
@@ -76,15 +66,18 @@ function TurmasMain() {
             type="primary"
             onClick={() => {
               //console.log(record);
-              setTurma(record);
+              setTipoEnsino(record);
               setModalContent(
                 <Modal
-                  title={`Editando a Turma: ${record.nome_turma}`}
+                  title={`Editando o Tipo de Ensino: ${record.nome_tipo_ensino}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateTurma turma={turma} handleOk={handleOk} />
+                  <UpdateTipoEnsino
+                    tipo_ensino={tipoEnsino}
+                    handleOk={handleOk}
+                  />
                 </Modal>
               );
 
@@ -99,20 +92,23 @@ function TurmasMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Deletanda a Turma: ${record.nome_turma}`}
+                  title={`Deletando o Tipo de Ensino: ${record.nome_tipo_ensino}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
                   <h3>
-                    Gostaria mesmo de deletar a turma: {record.nome_turma}?
+                    Gostaria mesmo de deletar o tipo de Ensino{" "}
+                    {record.nome_tipo_ensino}?
                   </h3>
                   <Button
                     type="primary"
                     danger
                     onClick={() => {
-                      deleteTurma(record.id_turma).then(() => {
-                        alert(`Deletado a Turma: ${record.nome_turma}`);
+                      deleteTipo_ensino(record.id_tipo_ensino).then(() => {
+                        alert(
+                          `Deletado o Tipo de Ensino: ${record.nome_tipo_ensino}`
+                        );
 
                         handleOk();
                       });
@@ -132,39 +128,39 @@ function TurmasMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Turma" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Tipos de Ensino" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando nova Turma:`}
+                title={`Cadastrando novo Tipo de Ensino:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormTurma handleOk={handleOk} />
+                <FormTipoEnsino handleOk={handleOk} />
               </Modal>
             );
 
             setVisible(true);
           }}
         >
-          Cadastrar Turma
+          Cadastrar Tipo de Ensino
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por Turma"
+        placeholder="Pesquisar por Tipo de Ensino"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_turma.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_tipo_ensino.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -200,4 +196,4 @@ function TurmasMain() {
   );
 }
 
-export default TurmasMain;
+export default TipoEnsinoMain;

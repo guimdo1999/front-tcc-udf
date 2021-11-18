@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, Card } from "antd";
-import { insertTurma } from "../../Utils/Turma";
+import { putTurma } from "../../Utils/Turma";
 
-function FormTurma() {
+function UpdateTurma({ handleOk, turma }) {
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 9 },
@@ -11,14 +11,11 @@ function FormTurma() {
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
-    types: {
-      email: "${label} não é um e-mail válido!",
-      number: "${label} não é um número válido!",
-    },
   };
   const onFinish = (values) => {
-    insertTurma(values).then(() => {
+    putTurma(values).then(() => {
       alert(`Cadastrado o tipo de ensino: ${values.nome_turma}`);
+      handleOk();
     });
   };
   return (
@@ -27,6 +24,12 @@ function FormTurma() {
       name="nest-messages"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      initialValues={{
+        nome_turma: turma.nome_turma,
+        ano_turma: turma.ano_turma,
+        qtd_meses: turma.qtd_meses,
+        tipo_de_calendario: turma.tipo_de_calendario,
+      }}
     >
       <Form.Item
         name={"nome_turma"}
@@ -39,14 +42,14 @@ function FormTurma() {
       <Form.Item
         name={"ano_turma"}
         label="Ano da Turma"
-        rules={[{ type: "number", required: true }]}
+        rules={[{ required: true }]}
       >
         <InputNumber style={{ width: "50%" }} />
       </Form.Item>
       <Form.Item
         name={"qtd_meses"}
         label="Quantia Meses"
-        rules={[{ type: "number", required: true }]}
+        rules={[{ required: true }]}
       >
         <InputNumber style={{ width: "50%" }} placeholder="6" />
       </Form.Item>
@@ -67,4 +70,4 @@ function FormTurma() {
   );
 }
 
-export default FormTurma;
+export default UpdateTurma;

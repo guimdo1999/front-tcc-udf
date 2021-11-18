@@ -27,6 +27,7 @@ import Home from "../pages/Home";
 import { cookies } from "../pages/Login/Login";
 import UsuariosMain from "../pages/Usuarios/UsuariosMain";
 import SubMenu from "antd/lib/menu/SubMenu";
+import TipoEnsinoMain from "../pages/TipoEnsino/TipoEnsinoMain";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -114,20 +115,27 @@ function MainMenu() {
               <Link to={`/main/professores`} />
               Professores
             </Menu.Item>
-            <Menu.Item key="8" icon={<UploadOutlined />}>
+            <Menu.Item key="4" icon={<UploadOutlined />}>
               <Link to={`/main/professores`} />
               Leciona
             </Menu.Item>
           </SubMenu>
-          <Menu.Item key="4" icon={<TeamOutlined />}>
-            <Link to={`/main/turmas`} />
-            Turmas
-          </Menu.Item>
-          <Menu.Item key="5" icon={<FieldTimeOutlined />}>
+          <SubMenu key="subTurmas" title="Turmas" icon={<FormOutlined />}>
+            <Menu.Item key="5" icon={<TeamOutlined />}>
+              <Link to={`/main/turmas`} />
+              Turmas
+            </Menu.Item>
+            <Menu.Item key="6" icon={<TeamOutlined />}>
+              <Link to={`/main/tipo-ensino`} />
+              Tipo de Ensino
+            </Menu.Item>
+          </SubMenu>
+
+          <Menu.Item key="7" icon={<FieldTimeOutlined />}>
             <Link to={`/main/horarios`} />
             Horários
           </Menu.Item>
-          <Menu.Item key="6" icon={<UserSwitchOutlined />}>
+          <Menu.Item key="8" icon={<UserSwitchOutlined />}>
             <Link to={`/main/usuarios`} />
             Gerenciar Usuários
           </Menu.Item>
@@ -164,6 +172,9 @@ function MainMenu() {
             </Route>
             <Route path={`/main/turmas`}>
               <TurmasMain />
+            </Route>
+            <Route path={`/main/tipo-ensino`}>
+              <TipoEnsinoMain />
             </Route>
             <Route path={`/main/horarios`}>
               <HorariosMain />
