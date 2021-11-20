@@ -6,6 +6,8 @@ export const insertAluno = async (dados) => {
     data_nascimento: dados.data_nascimento,
     sexo: dados.sexo,
     matricula: dados.matricula,
+    id_turma: dados.id_turma,
+    is_active: dados.is_active,
     telefone: dados.telefone,
     email: dados.email,
   };
@@ -37,6 +39,8 @@ export const putAlunoId = async (id, dados) => {
     data_nascimento: dados.data_nascimento,
     sexo: dados.sexo,
     matricula: dados.matricula,
+    id_turma: dados.id_turma,
+    is_active: dados.is_active,
     telefone: dados.telefone,
     email: dados.email,
   };

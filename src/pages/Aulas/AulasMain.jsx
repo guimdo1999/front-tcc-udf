@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
 
 import { Button, Card, Modal, Row, Space, Table } from "antd";
-import Search from "antd/lib/input/Search";
-import FormHorario from "../../components/Cadastros/FormHorario";
 
-import { deleteHorario, getHorario } from "../../Utils/Horario";
-import UpdateHorario from "../../components/Update/UpdateHorario";
+import { getTurma } from "../../Utils/Turma";
+import { getProfessor } from "../../Utils/Professor";
+import { deleteAula, getAulas } from "../../Utils/Aulas";
+import { getDisciplina } from "../../Utils/Disciplina";
+import UpdateAulas from "../../components/Update/UpdateAulas";
+import FormAulas from "../../components/Cadastros/FormAulas";
 
-function HorariosMain() {
+function AulasMain() {
   const [busca, setBusca] = useState([]);
-  const [horario, setHorario] = useState();
-  const [valueF, setValueF] = useState("");
-  const [reload, setReload] = useState(false);
+  const [professor, setProfessor] = useState();
+  const [disciplina, setDisciplina] = useState();
+  const [turma, setTurma] = useState();
+
+  const [aula, setAula] = useState();
+
+  //const [valueF, setValueF] = useState("");
+  const [reload, setReload] = useState(true);
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -27,58 +33,97 @@ function HorariosMain() {
     setReload(false);
     setModalContent("");
   };
-
   /**/
+
   useEffect(() => {
-    if (valueF === "" || reload === true) {
-      getHorario().then((data) => {
+    if (reload === true) {
+      getAulas().then((data) => {
         setBusca(data);
-        setReload(false);
       });
+      getDisciplina().then((data) => {
+        setDisciplina(data);
+      });
+      getProfessor().then((data) => {
+        setProfessor(data);
+      });
+      getTurma().then((data) => {
+        setTurma(data);
+      });
+      setReload(false);
     }
-  }, [valueF || reload]);
+  }, [reload]);
 
   const columns = [
     {
-      title: "Nome do horário",
-      dataIndex: "nome_horario",
-      key: "nome_horario",
+      title: "Nome do Professor",
+      dataIndex: "id_professor",
+      key: "id_professor",
 
-      render: (text) => <p>{text}</p>,
-
-      sorter: (a, b) => a.nome_horario.localeCompare(b.nome_horario),
-      defaultSortOrder: "ascend",
-      sortDirections: ["descend", "ascend"],
+      render: (id) => {
+        if (professor) {
+          const found = professor.find((obj) => obj.id_professor === id);
+          return found.nome_professor;
+        }
+      },
     },
     {
-      title: "Início do horário",
-      dataIndex: "hora_inicio",
-      key: "hora_inicio",
+      title: "Nome Disciplina",
+      dataIndex: "id_disciplina",
+      key: "id_disciplina",
+
+      render: (id) => {
+        if (disciplina) {
+          const found = disciplina.find((obj) => obj.id_disciplina === id);
+          return found.nome_disciplina;
+        }
+      },
     },
     {
-      title: "Fim do horário",
-      dataIndex: "hora_fim",
-      key: "hora_fim",
+      title: "Nome Turma",
+      dataIndex: "id_turma",
+      key: "id_turma",
+
+      render: (id) => {
+        if (turma) {
+          const found = turma.find((obj) => obj.id_turma === id);
+          return found.nome_turma;
+        }
+      },
+    },
+    {
+      title: "Quantia de Aulas Semanais",
+      dataIndex: "qtd_aula_semana",
+      key: "qtd_aula_semana",
     },
 
+    {
+      title: "Aulas começam/começarão",
+      dataIndex: "data_inicio_aula",
+      key: "data_inicio_aula",
+    },
+    {
+      title: "Aulas terminam/terminarão",
+      dataIndex: "data_fim_aula",
+      key: "data_fim_aula",
+    },
     {
       title: "Ações",
-      key: "id_disciplina",
+      key: "id_aula",
       render: (record) => (
         <Space size="middle">
           <Button
             type="primary"
             onClick={() => {
               //console.log(record);
-              setHorario(record);
+              setAula(record);
               setModalContent(
                 <Modal
-                  title={`Editando a Horario: ${record.nome_horario}`}
+                  title={`Editando a Aula`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateHorario horario={horario} handleOk={handleOk} />
+                  <UpdateAulas aula={aula} handleOk={handleOk} />
                 </Modal>
               );
 
@@ -93,20 +138,18 @@ function HorariosMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Deletando a horario: ${record.nome_horario}`}
+                  title={`Deletanda a aula`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <h3>
-                    Gostaria mesmo de deletar a horario {record.nome_horario}?
-                  </h3>
+                  <h3>Gostaria mesmo de deletar essa aula??</h3>
                   <Button
                     type="primary"
                     danger
                     onClick={() => {
-                      deleteHorario(record.id_horario).then(() => {
-                        alert(`Deletado o horario: ${record.nome_horario}`);
+                      deleteAula(record.id_aula).then(() => {
+                        alert(`Deletado a Aula selecionada`);
 
                         handleOk();
                       });
@@ -126,39 +169,39 @@ function HorariosMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Horario" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Aulas" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando novo horario:`}
+                title={`Cadastrando nova Aula:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormHorario handleOk={handleOk} />
+                <FormAulas handleOk={handleOk} />
               </Modal>
             );
 
             setVisible(true);
           }}
         >
-          Cadastrar Horario
+          Cadastrar Aula
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
-      <Search
-        placeholder="Pesquisar por Horario"
+      {/* <Search
+        placeholder="Pesquisar por Disciplina"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_disciplina.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_turma.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -167,7 +210,7 @@ function HorariosMain() {
           float: "right",
           margin: "5px",
         }}
-      />
+      /> */}
 
       <Table
         columns={columns}
@@ -175,18 +218,14 @@ function HorariosMain() {
         dataSource={busca}
         showSorterTooltip={false}
         footer={() => {
-          if (!valueF) {
+          if (busca) {
             return (
               <h5>
                 Existem <b>{busca.length}</b> resultados.
               </h5>
             );
           } else {
-            return (
-              <h5>
-                Existem <b>{busca.length}</b> resultados para {valueF}.
-              </h5>
-            );
+            return <h5>Não existem resultados.</h5>;
           }
         }}
       />
@@ -194,4 +233,4 @@ function HorariosMain() {
   );
 }
 
-export default HorariosMain;
+export default AulasMain;

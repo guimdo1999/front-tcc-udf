@@ -12,7 +12,6 @@ import {
   BorderlessTableOutlined,
   TeamOutlined,
   FieldTimeOutlined,
-  UserSwitchOutlined,
   FormOutlined,
 } from "@ant-design/icons";
 import { getMe, logout } from "../Utils/Login";
@@ -25,8 +24,8 @@ import HorariosMain from "../pages/Horarios/HorariosMain";
 import Home from "../pages/Home";
 
 import { cookies } from "../pages/Login/Login";
-import UsuariosMain from "../pages/Usuarios/UsuariosMain";
 import SubMenu from "antd/lib/menu/SubMenu";
+import Page404 from "../pages/Page404";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -164,10 +163,14 @@ function ManagerMenu() {
             <Route path={`/gerente/horarios`}>
               <HorariosMain />
             </Route>
+            <Route>
+              <Page404 />
+            </Route>
           </Switch>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Criado por Guilherme Matos de Oliveira e Lucas Querneu.
+          Criado por Guilherme Matos de Oliveira, Lucas Querneu e Domingos
+          Gomes.
           <br />
           Utilizado Ant Design ©2018 Created by Ant UED.
         </Footer>

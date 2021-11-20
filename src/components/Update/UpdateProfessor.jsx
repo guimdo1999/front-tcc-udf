@@ -14,8 +14,8 @@ function UpdateProfessor({ professor, handleOk }) {
   };
 
   const onFinish = (values) => {
-    putProfessorId(values).then(() => {
-      alert(`Cadastrado o professor: ${values.nome_professor}`);
+    putProfessorId(professor.id_professor, values).then(() => {
+      alert(`Editado o professor: ${values.nome_professor}`);
       handleOk();
     });
   };
@@ -45,7 +45,7 @@ function UpdateProfessor({ professor, handleOk }) {
       <Form.Item
         name={"matricula"}
         label="Mátricula"
-        rules={[{ type: "number", required: true }]}
+        rules={[{ required: true }]}
       >
         <InputNumber style={{ width: "100%" }} />
       </Form.Item>

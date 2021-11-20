@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Space, Table } from "antd";
+import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import { deleteUsuario, getMe, getUsuarios } from "../../Utils/Login";
-import UpdateUsuario from "../../components/Update/UpdateUsuario";
+import { deleteEnsino, getEnsino } from "../../Utils/Ensino";
+import { getProfessor } from "../../Utils/Professor";
+import { getDisciplina } from "../../Utils/Disciplina";
+import FormEnsino from "../../components/Cadastros/FormEnsino";
 
-function UsuariosMain() {
+function LecionaMain() {
   const [busca, setBusca] = useState([]);
-  const [usuario, setUsuario] = useState();
+  const [professor, setProfessor] = useState();
+  const [disciplina, setDisciplina] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
-  const [nomeUser, setNomeUser] = useState("");
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -31,81 +32,79 @@ function UsuariosMain() {
   /**/
 
   useEffect(() => {
-    getMe().then((data1) => {
-      setNomeUser(data1.cod_login);
-      if (valueF === "" || reload === true) {
-        getUsuarios().then((data) => {
-          setBusca(data);
-
-          setReload(false);
-        });
-      }
-    });
+    if (valueF === "" || reload === true) {
+      getEnsino().then((data) => {
+        setBusca(data);
+        setReload(false);
+      });
+      getProfessor().then((data) => {
+        setProfessor(data);
+      });
+      getDisciplina().then((data) => {
+        setDisciplina(data);
+      });
+    }
   }, [valueF, reload]);
 
   const columns = [
-    {
-      title: "Nome de login",
-      dataIndex: "cod_login",
-      key: "cod_login",
+    /* {
+      title: "Numero",
+      dataIndex: "id_ensino",
+      key: "id_ensino",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.cod_login.localeCompare(b.cod_login),
+      sorter: (a, b) => a.id_ensino.localeCompare(b.id_ensino),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
+    }, */
+    {
+      title: "Nome do Professor",
+      dataIndex: "id_professor",
+      key: "id_professor",
+
+      render: (id) => {
+        if (professor) {
+          const found = professor.find((obj) => obj.id_professor === id);
+          return found.nome_professor;
+        }
+      },
     },
     {
-      title: "Código de Perfil",
-      dataIndex: "cod_perfil",
-      key: "cod_perfil",
+      title: "Nome Disciplina",
+      dataIndex: "id_disciplina",
+      key: "id_disciplina",
+
+      render: (id) => {
+        if (disciplina) {
+          const found = disciplina.find((obj) => obj.id_disciplina === id);
+          return found.nome_disciplina;
+        }
+      },
     },
     {
       title: "Ações",
-      key: "cod_login",
+      key: "id_ensino",
       render: (record) => (
         <Space size="middle">
-          <Button
-            type="primary"
-            onClick={() => {
-              //console.log(record);
-              setUsuario(record);
-              setModalContent(
-                <Modal
-                  title={`Editando o usuario: ${record.cod_login}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <UpdateUsuario usuario={usuario} handleOk={handleOk} />
-                </Modal>
-              );
-
-              setVisible(true);
-            }}
-          >
-            Editar
-          </Button>
           <Button
             type="primary"
             danger
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Deletando o usuario: ${record.cod_login}`}
+                  title={`Deletar essa conexão?`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <h3>
-                    Gostaria mesmo de deletar o usuario {record.cod_login}?
-                  </h3>
+                  <h3>Gostaria mesmo de deletar?</h3>
                   <Button
                     type="primary"
                     danger
                     onClick={() => {
-                      deleteUsuario(record.cod_login).then(() => {
-                        alert(`Deletado o usuario: ${record.cod_login}`);
+                      deleteEnsino(record.id_ensino).then(() => {
+                        alert(`Deletado.`);
 
                         handleOk();
                       });
@@ -125,26 +124,39 @@ function UsuariosMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Usuários" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Leciona" style={{ width: "100%" }}>
+      <Row>
+        <Button
+          type="primary"
+          onClick={() => {
+            setModalContent(
+              <Modal
+                title={`Cadastrando nova conexão:`}
+                visible={visible}
+                onCancel={handleCancel}
+                footer={null}
+              >
+                <FormEnsino handleOk={handleOk} />
+              </Modal>
+            );
+
+            setVisible(true);
+          }}
+        >
+          Cadastrar Tipo de Ensino
+        </Button>
+      </Row>
       <br></br>
       <br></br>
       {modalContent}
-      <p
-        style={{
-          width: "45%",
-          float: "left",
-        }}
-      >
-        Cuidado com seu próprio usuário, cujo é: <b>{nomeUser}</b>
-      </p>
       <Search
-        placeholder="Pesquisar por usuário"
+        placeholder="Pesquisar por Tipo de Ensino"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.cod_login.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_tipo_ensino.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -180,4 +192,4 @@ function UsuariosMain() {
   );
 }
 
-export default UsuariosMain;
+export default LecionaMain;

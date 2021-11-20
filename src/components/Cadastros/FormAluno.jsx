@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
 import { insertAluno } from "../../Utils/Aluno";
+import { getTurma } from "../../Utils/Turma";
 
 function FormAluno({ handleOk }) {
+  const [turma, setTurma] = useState([]);
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 9 },
   };
   const dateFormat = "DD/MM/YYYY";
+
+  useEffect(() => {
+    getTurma().then((data) => {
+      setTurma(data);
+    });
+  }, []);
 
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
@@ -53,12 +61,30 @@ function FormAluno({ handleOk }) {
         />
       </Form.Item>
 
+      <Form.Item name={"id_turma"} label="Turma:" rules={[{ required: true }]}>
+        <Select style={{ width: "100%" }} placeholder="Selecione uma turma">
+          {turma.map((item) => {
+            return (
+              <Select.Option value={item.id_turma}>
+                {item.nome_turma}
+              </Select.Option>
+            );
+          })}
+        </Select>
+      </Form.Item>
+
       <Form.Item
         name={"matricula"}
         label="Mátricula"
         rules={[{ type: "number", required: true }]}
       >
         <InputNumber style={{ width: "100%" }} />
+      </Form.Item>
+      <Form.Item label="Está ativo" name={"is_active"} required>
+        <Select style={{ width: "100%" }} placeholder="Selecione sim ou não">
+          <Select.Option value="Sim">Sim</Select.Option>
+          <Select.Option value="Não">Não</Select.Option>
+        </Select>
       </Form.Item>
       <Form.Item
         name={"telefone"}

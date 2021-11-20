@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import { insertHorario } from "../../Utils/Horario";
+import { putHorarioId } from "../../Utils/Horario";
 
 function UpdateHorario({ horario, handleOk }) {
   const layout = {
@@ -16,7 +16,7 @@ function UpdateHorario({ horario, handleOk }) {
     },
   };
   const onFinish = (values) => {
-    insertHorario(values).then(() => {
+    putHorarioId(horario.id_horario, values).then(() => {
       alert(`Cadastrado o horário: ${values.nome_horario}`);
       handleOk();
     });

@@ -6,8 +6,12 @@ import Registrar from "./pages/Login/Registrar";
 import MainMenu from "./components/MainMenu";
 import NotAdminMenu from "./components/NotAdminMenu";
 import ManagerMenu from "./components/ManagerMenu";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    document.title = "Escola!";
+  }, []);
   return (
     <Router>
       <Switch>

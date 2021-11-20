@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Space, Table } from "antd";
+import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import { deleteUsuario, getMe, getUsuarios } from "../../Utils/Login";
-import UpdateUsuario from "../../components/Update/UpdateUsuario";
+import { deleteTurno, getTurno } from "../../Utils/Turno";
+import UpdateTurno from "../../components/Update/UpdateTurno";
+import FormTurno from "../../components/Cadastros/FormTurno";
 
-function UsuariosMain() {
+function TurnoMain() {
   const [busca, setBusca] = useState([]);
-  const [usuario, setUsuario] = useState();
+  const [turno, setTurno] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
-  const [nomeUser, setNomeUser] = useState("");
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
@@ -24,60 +24,50 @@ function UsuariosMain() {
   };
 
   const handleCancel = () => {
-    setReload(false);
     setModalContent("");
+    setReload(false);
   };
 
   /**/
 
   useEffect(() => {
-    getMe().then((data1) => {
-      setNomeUser(data1.cod_login);
-      if (valueF === "" || reload === true) {
-        getUsuarios().then((data) => {
-          setBusca(data);
-
-          setReload(false);
-        });
-      }
-    });
-  }, [valueF, reload]);
+    if (valueF === "" || reload === true) {
+      getTurno().then((data) => {
+        setBusca(data);
+        setReload(false);
+      });
+    }
+  }, [valueF || reload]);
 
   const columns = [
     {
-      title: "Nome de login",
-      dataIndex: "cod_login",
-      key: "cod_login",
+      title: "Nome do Tipo de Ensino",
+      dataIndex: "nome_turno",
+      key: "nome_turno",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.cod_login.localeCompare(b.cod_login),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Código de Perfil",
-      dataIndex: "cod_perfil",
-      key: "cod_perfil",
-    },
-    {
       title: "Ações",
-      key: "cod_login",
+      key: "id_turno",
       render: (record) => (
         <Space size="middle">
           <Button
             type="primary"
             onClick={() => {
               //console.log(record);
-              setUsuario(record);
+              setTurno(record);
               setModalContent(
                 <Modal
-                  title={`Editando o usuario: ${record.cod_login}`}
+                  title={`Editando o Turno: ${record.nome_turno}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateUsuario usuario={usuario} handleOk={handleOk} />
+                  <UpdateTurno turno={turno} handleOk={handleOk} />
                 </Modal>
               );
 
@@ -92,20 +82,21 @@ function UsuariosMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Deletando o usuario: ${record.cod_login}`}
+                  title={`Deletando o Tipo de Ensino: ${record.nome_turno}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
                   <h3>
-                    Gostaria mesmo de deletar o usuario {record.cod_login}?
+                    Gostaria mesmo de deletar o tipo de Ensino{" "}
+                    {record.nome_turno}?
                   </h3>
                   <Button
                     type="primary"
                     danger
                     onClick={() => {
-                      deleteUsuario(record.cod_login).then(() => {
-                        alert(`Deletado o usuario: ${record.cod_login}`);
+                      deleteTurno(record.id_turno).then(() => {
+                        alert(`Deletado o Turno: ${record.nome_turno}`);
 
                         handleOk();
                       });
@@ -125,26 +116,39 @@ function UsuariosMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Usuários" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Turnos" style={{ width: "100%" }}>
+      <Row>
+        <Button
+          type="primary"
+          onClick={() => {
+            setModalContent(
+              <Modal
+                title={`Cadastrando novo Turno:`}
+                visible={visible}
+                onCancel={handleCancel}
+                footer={null}
+              >
+                <FormTurno handleOk={handleOk} />
+              </Modal>
+            );
+
+            setVisible(true);
+          }}
+        >
+          Cadastrar Turno
+        </Button>
+      </Row>
       <br></br>
       <br></br>
       {modalContent}
-      <p
-        style={{
-          width: "45%",
-          float: "left",
-        }}
-      >
-        Cuidado com seu próprio usuário, cujo é: <b>{nomeUser}</b>
-      </p>
       <Search
-        placeholder="Pesquisar por usuário"
+        placeholder="Pesquisar por Turno"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.cod_login.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_tipo_ensino.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -180,4 +184,4 @@ function UsuariosMain() {
   );
 }
 
-export default UsuariosMain;
+export default TurnoMain;

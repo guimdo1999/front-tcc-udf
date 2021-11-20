@@ -1,6 +1,8 @@
-import React from "react";
-import { Form, Input, InputNumber, Button, Card } from "antd";
+import React, { useEffect, useState } from "react";
+import { Form, Input, InputNumber, Button, Select } from "antd";
 import { putTurma } from "../../Utils/Turma";
+import { getTurno } from "../../Utils/Turno";
+import { getTipo_ensino } from "../../Utils/TipoEnsino";
 
 function UpdateTurma({ handleOk, turma }) {
   const layout = {
@@ -8,13 +10,25 @@ function UpdateTurma({ handleOk, turma }) {
     wrapperCol: { span: 9 },
   };
 
+  const [turno, setTurno] = useState([]);
+  const [tipoEnsino, setTipoEnsino] = useState([]);
+
+  useEffect(() => {
+    getTurno().then((data) => {
+      setTurno(data);
+    });
+    getTipo_ensino().then((data) => {
+      setTipoEnsino(data);
+    });
+  }, []);
+
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
   };
   const onFinish = (values) => {
-    putTurma(values).then(() => {
-      alert(`Cadastrado o tipo de ensino: ${values.nome_turma}`);
+    putTurma(turma.id_turma, values).then(() => {
+      alert(`Editado a turma: ${values.nome_turma}`);
       handleOk();
     });
   };
@@ -29,6 +43,8 @@ function UpdateTurma({ handleOk, turma }) {
         ano_turma: turma.ano_turma,
         qtd_meses: turma.qtd_meses,
         tipo_de_calendario: turma.tipo_de_calendario,
+        id_turno: turma.id_turno,
+        id_tipo_ensino: turma.id_tipo_ensino,
       }}
     >
       <Form.Item
@@ -37,6 +53,33 @@ function UpdateTurma({ handleOk, turma }) {
         rules={[{ required: true }]}
       >
         <Input placeholder="Ex: 1a, Primeiro Ano" />
+      </Form.Item>
+
+      <Form.Item name={"id_turno"} label="Turno:" rules={[{ required: true }]}>
+        <Select style={{ width: "100%" }} placeholder="Selecione um Turno">
+          {turno.map((item) => {
+            return (
+              <Select.Option value={item.id_turno}>
+                {item.nome_turno}
+              </Select.Option>
+            );
+          })}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name={"id_tipo_ensino"}
+        label="Tipo de Ensino:"
+        rules={[{ required: true }]}
+      >
+        <Select style={{ width: "100%" }} placeholder="Selecione um Tipo">
+          {tipoEnsino.map((item) => {
+            return (
+              <Select.Option value={item.id_tipo_ensino}>
+                {item.nome_tipo_ensino}
+              </Select.Option>
+            );
+          })}
+        </Select>
       </Form.Item>
 
       <Form.Item
@@ -55,7 +98,7 @@ function UpdateTurma({ handleOk, turma }) {
       </Form.Item>
       <Form.Item
         name={"tipo_de_calendario"}
-        label="Tipo de calendário"
+        label="Calendário"
         rules={[{ required: true }]}
       >
         <Input style={{ width: "75%" }} placeholder="???" />

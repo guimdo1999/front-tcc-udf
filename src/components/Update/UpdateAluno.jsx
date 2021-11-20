@@ -61,15 +61,11 @@ function UpdateAluno({ aluno, handleOk }) {
       <Form.Item
         name={"matricula"}
         label="Mátricula"
-        rules={[{ type: "number", required: true }]}
+        rules={[{ required: true }]}
       >
         <InputNumber style={{ width: "100%" }} />
       </Form.Item>
-      <Form.Item
-        name={"telefone"}
-        label="Telefone"
-        rules={[{ type: "number" }]}
-      >
+      <Form.Item name={"telefone"} label="Telefone">
         <InputNumber style={{ width: "100%" }} placeholder="61981234567" />
       </Form.Item>
       <Form.Item name={"email"} label="E-mail" rules={[{ type: "email" }]}>

@@ -10,6 +10,7 @@ import { getMe, logout } from "../Utils/Login";
 
 import Home from "../pages/Home";
 import { cookies } from "../pages/Login/Login";
+import Page404 from "../pages/Page404";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -103,10 +104,14 @@ function NotAdminMenu() {
             <Route path={`/home`}>
               <Home />
             </Route>
+            <Route>
+              <Page404 />
+            </Route>
           </Switch>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Criado por Guilherme Matos de Oliveira. <br />
+          Criado por Guilherme Matos de Oliveira, Lucas Querneu e Domingos
+          Gomes. <br />
           Utilizado Ant Design ©2018 Created by Ant UED.
         </Footer>
       </Layout>

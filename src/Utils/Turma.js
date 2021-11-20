@@ -6,6 +6,8 @@ export const insertTurma = async (dados) => {
     ano_turma: dados.ano_turma,
     qtd_meses: dados.qtd_meses,
     tipo_de_calendario: dados.tipo_de_calendario,
+    id_turno: dados.id_turno,
+    id_tipo_ensino: dados.id_tipo_ensino,
   };
   return await backEndUtils
     .chamarBackEnd("POST", "/api/turma", registrar_turma)
@@ -13,13 +15,14 @@ export const insertTurma = async (dados) => {
       return resposta.json().then((data) => data);
     });
 };
-
 export const putTurma = async (id, dados) => {
   const update_turma = {
     nome_turma: dados.nome_turma,
     ano_turma: dados.ano_turma,
     qtd_meses: dados.qtd_meses,
     tipo_de_calendario: dados.tipo_de_calendario,
+    id_turno: dados.id_turno,
+    id_tipo_ensino: dados.id_tipo_ensino,
   };
   return await backEndUtils
     .chamarBackEnd("PUT", "/api/turma/" + id, update_turma)
@@ -35,7 +38,6 @@ export const getTurma = async () => {
       return resposta.json().then((data) => data);
     });
 };
-
 export const deleteTurma = async (id) => {
   return await backEndUtils
     .chamarBackEnd("DELETE", "/api/turma/" + id)

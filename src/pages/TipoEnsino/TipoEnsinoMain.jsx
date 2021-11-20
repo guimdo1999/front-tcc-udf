@@ -25,8 +25,8 @@ function TipoEnsinoMain() {
   };
 
   const handleCancel = () => {
-    setReload(false);
     setModalContent("");
+    setReload(false);
   };
 
   /**/

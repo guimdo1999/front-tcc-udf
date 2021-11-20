@@ -30,7 +30,7 @@ function FormDisciplina({ handleOk }) {
     >
       <Form.Item
         name={"nome_disciplina"}
-        label="Tipo de Ensino"
+        label="Nome da Disciplina"
         rules={[{ required: true }]}
       >
         <Input placeholder="Ex: Matemática" />

@@ -22,6 +22,13 @@ export const getProfessor = async () => {
       return resposta.json().then((data) => data);
     });
 };
+export const getProfessorId = async (id) => {
+  return await backEndUtils
+    .chamarBackEnd("GET", `/api/professor/${id}`)
+    .then((resposta) => {
+      return resposta.json().then((data) => data);
+    });
+};
 
 export const putProfessorId = async (id, dados) => {
   const update_professor = {

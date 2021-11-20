@@ -4,7 +4,7 @@ import "./estiloMenu.css";
 import { Link, useHistory, Switch } from "react-router-dom";
 import { BrowserRouter as Route } from "react-router-dom";
 
-import { Button, Layout, Menu } from "antd";
+import { Avatar, Button, Layout, Menu } from "antd";
 import {
   UploadOutlined,
   UserOutlined,
@@ -14,6 +14,7 @@ import {
   FieldTimeOutlined,
   UserSwitchOutlined,
   FormOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 import { getMe, logout } from "../Utils/Login";
 
@@ -28,6 +29,10 @@ import { cookies } from "../pages/Login/Login";
 import UsuariosMain from "../pages/Usuarios/UsuariosMain";
 import SubMenu from "antd/lib/menu/SubMenu";
 import TipoEnsinoMain from "../pages/TipoEnsino/TipoEnsinoMain";
+import LecionaMain from "../pages/Leciona/LecionaMain";
+import Page404 from "../pages/Page404";
+import TurnoMain from "../pages/Turno/TurnoMain";
+import AulasMain from "../pages/Aulas/AulasMain";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -45,6 +50,8 @@ function MainMenu() {
           case "Gerente":
             history.push("/gerente");
             break;
+          default:
+            console.log("");
         }
       })
       .catch((err) => {
@@ -77,20 +84,14 @@ function MainMenu() {
           left: 0,
         }}
         breakpoint="lg"
-        collapsedWidth="30"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
+        collapsedWidth="36"
       >
         <div className="logo" />
         <Header
           className="site-layout-sub-header-background"
-          style={{ padding: 0 }}
+          style={{ paddingLeft: "5%" }}
         >
-          <p>Olá {nomeUsuario}</p>
+          <Avatar size={32}>{nomeUsuario}</Avatar>
         </Header>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["0"]}>
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
@@ -98,10 +99,7 @@ function MainMenu() {
             <Link to={`/main/home`} />
             Home
           </Menu.Item>
-          <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
-            <Link to={`/main/alunos`} />
-            Alunos
-          </Menu.Item>
+
           <SubMenu key="subLeciona" title="Ensino" icon={<FormOutlined />}>
             <Menu.Item
               key="2"
@@ -115,27 +113,39 @@ function MainMenu() {
               <Link to={`/main/professores`} />
               Professores
             </Menu.Item>
-            <Menu.Item key="4" icon={<UploadOutlined />}>
-              <Link to={`/main/professores`} />
+            <Menu.Item key="4" icon={<BellOutlined />}>
+              <Link to={`/main/leciona`} />
               Leciona
             </Menu.Item>
           </SubMenu>
           <SubMenu key="subTurmas" title="Turmas" icon={<FormOutlined />}>
+            <Menu.Item key="6" icon={<TeamOutlined />}>
+              <Link to={`/main/tipo_ensino`} />
+              Tipo de Ensino
+            </Menu.Item>
+            <Menu.Item key="7" icon={<TeamOutlined />}>
+              <Link to={`/main/turnos`} />
+              Turnos
+            </Menu.Item>
             <Menu.Item key="5" icon={<TeamOutlined />}>
               <Link to={`/main/turmas`} />
               Turmas
             </Menu.Item>
-            <Menu.Item key="6" icon={<TeamOutlined />}>
-              <Link to={`/main/tipo-ensino`} />
-              Tipo de Ensino
-            </Menu.Item>
           </SubMenu>
+          <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
+            <Link to={`/main/alunos`} />
+            Alunos
+          </Menu.Item>
 
-          <Menu.Item key="7" icon={<FieldTimeOutlined />}>
+          <Menu.Item key="8" icon={<FieldTimeOutlined />}>
             <Link to={`/main/horarios`} />
             Horários
           </Menu.Item>
-          <Menu.Item key="8" icon={<UserSwitchOutlined />}>
+          <Menu.Item key="9" icon={<UserSwitchOutlined />}>
+            <Link to={`/main/aulas`} />
+            Aulas
+          </Menu.Item>
+          <Menu.Item key="10" icon={<UserSwitchOutlined />}>
             <Link to={`/main/usuarios`} />
             Gerenciar Usuários
           </Menu.Item>
@@ -170,11 +180,17 @@ function MainMenu() {
             <Route path={`/main/professores`}>
               <ProfessoresMain />
             </Route>
+            <Route path={`/main/leciona`}>
+              <LecionaMain />
+            </Route>
             <Route path={`/main/turmas`}>
               <TurmasMain />
             </Route>
-            <Route path={`/main/tipo-ensino`}>
+            <Route path={`/main/tipo_ensino`}>
               <TipoEnsinoMain />
+            </Route>
+            <Route path={`/main/turnos`}>
+              <TurnoMain />
             </Route>
             <Route path={`/main/horarios`}>
               <HorariosMain />
@@ -182,10 +198,17 @@ function MainMenu() {
             <Route path={`/main/usuarios`}>
               <UsuariosMain />
             </Route>
+            <Route path={`/main/aulas`}>
+              <AulasMain />
+            </Route>
+            <Route>
+              <Page404 />
+            </Route>
           </Switch>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Criado por Guilherme Matos de Oliveira e Lucas Querneu.
+          Criado por Guilherme Matos de Oliveira, Lucas Querneu e Domingos
+          Gomes.
           <br />
           Utilizado Ant Design ©2018 Created by Ant UED.
         </Footer>

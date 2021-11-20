@@ -9,7 +9,7 @@ import FormAluno from "../../components/Cadastros/FormAluno";
 
 function AlunosMain() {
   const [busca, setBusca] = useState([]);
-  const [aluno, setAluno] = useState();
+  const [aluno, setAluno] = useState([]);
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
 
@@ -24,12 +24,11 @@ function AlunosMain() {
   };
 
   const handleCancel = () => {
-    setReload(false);
     setModalContent("");
+    setReload(false);
   };
 
   /**/
-
   useEffect(() => {
     if (valueF === "" || reload === true) {
       getAluno().then((data) => {
@@ -37,7 +36,7 @@ function AlunosMain() {
         setReload(false);
       });
     }
-  }, [valueF || reload]);
+  }, [valueF, reload]);
 
   const columns = [
     {
@@ -65,6 +64,14 @@ function AlunosMain() {
       title: "Matricula",
       dataIndex: "matricula",
       key: "address",
+      sorter: (a, b) => a.matricula.localeCompare(b.matricula),
+
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Ativo",
+      dataIndex: "is_active",
+      key: "is_active",
       sorter: (a, b) => a.matricula.localeCompare(b.matricula),
 
       sortDirections: ["ascend", "descend"],

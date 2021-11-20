@@ -13,8 +13,8 @@ function UpdateTipoEnsino({ handleOk, tipo_ensino }) {
     required: "${label} precisa ser preenchido!",
   };
   const onFinish = (values) => {
-    putTipo_ensino(values).then(() => {
-      alert(`Cadastrado o tipo de ensino: ${values.nome_tipo_ensino}`);
+    putTipo_ensino(tipo_ensino.id_tipo_ensino, values).then(() => {
+      alert(`Editado o tipo de ensino: ${values.nome_tipo_ensino}`);
       handleOk();
     });
   };

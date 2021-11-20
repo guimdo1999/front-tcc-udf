@@ -17,7 +17,7 @@ function UpdateDisciplina({ disciplina, handleOk }) {
   };
   const onFinish = (values) => {
     putDisciplinaId(disciplina.id_disciplina, values).then(() => {
-      alert(`Cadastrado a disciplina: ${values.nome_disciplina}`);
+      alert(`Editado a disciplina: ${values.nome_disciplina}`);
       handleOk();
     });
   };
