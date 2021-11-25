@@ -6,7 +6,7 @@ import Search from "antd/lib/input/Search";
 import { deleteEnsino, getEnsino } from "../../Utils/Ensino";
 import { getProfessor } from "../../Utils/Professor";
 import { getDisciplina } from "../../Utils/Disciplina";
-import FormEnsino from "../../components/Cadastros/FormEnsino";
+import FormEnsino from "./FormEnsino";
 
 function LecionaMain() {
   const [busca, setBusca] = useState([]);

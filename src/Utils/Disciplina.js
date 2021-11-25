@@ -18,7 +18,10 @@ export const getDisciplina = async () => {
   return await backEndUtils
     .chamarBackEnd("GET", "/api/disciplina")
     .then((resposta) => {
-      return resposta.json().then((data) => data);
+      if (resposta.status == 200) {
+        console.log(resposta.message);
+        return resposta.json().then((data) => data);
+      }
     });
 };
 
@@ -32,7 +35,7 @@ export const putDisciplinaId = async (id, dados) => {
   return await backEndUtils
     .chamarBackEnd("PUT", "/api/disciplina/" + id, update_disciplina)
     .then((resposta) => {
-      return resposta.json().then((data) => data);
+      return resposta.data;
     });
 };
 
@@ -40,6 +43,6 @@ export const deleteDisciplina = async (id) => {
   return await backEndUtils
     .chamarBackEnd("GET", "/api/disciplina/" + id)
     .then((resposta) => {
-      return resposta.json().then((data) => data);
+      return resposta.data;
     });
 };

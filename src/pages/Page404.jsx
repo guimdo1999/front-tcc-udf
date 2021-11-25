@@ -1,6 +1,6 @@
 import { Image } from "antd";
 import React from "react";
-import img from "../Assets/004.jpg";
+import img from "../Assets/404.jpg";
 
 const Page404 = () => {
   return (

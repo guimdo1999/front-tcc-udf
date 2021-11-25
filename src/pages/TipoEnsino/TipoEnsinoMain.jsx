@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import FormTipoEnsino from "../../components/Cadastros/FormTipoEnsino";
-
 import { deleteTipo_ensino, getTipo_ensino } from "../../Utils/TipoEnsino";
-import UpdateTipoEnsino from "../../components/Update/UpdateTipoEnsino";
+import FormTipoEnsino from "./FormTipoEnsino";
+import UpdateTipoEnsino from "./UpdateTipoEnsino";
 
 function TipoEnsinoMain() {
   const [busca, setBusca] = useState([]);

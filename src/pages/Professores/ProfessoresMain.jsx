@@ -4,8 +4,8 @@ import { Alert, Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
 import { deleteProfessor, getProfessor } from "../../Utils/Professor";
-import FormProfessor from "../../components/Cadastros/FormProfessor";
-import UpdateProfessor from "../../components/Update/UpdateProfessor";
+import FormProfessor from "./FormProfessor";
+import UpdateProfessor from "./UpdateProfessor";
 
 function ProfessoresMain() {
   const [busca, setBusca] = useState([]);

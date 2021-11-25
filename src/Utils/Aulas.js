@@ -23,6 +23,7 @@ export const getAulas = async () => {
       return resposta.json().then((data) => data);
     });
 };
+
 export const getAulasId = async (id) => {
   return await backEndUtils
     .chamarBackEnd("GET", `/api/aula/${id}`)

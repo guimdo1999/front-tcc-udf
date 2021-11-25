@@ -4,7 +4,7 @@ import { Button, Card, Modal, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
 import { deleteUsuario, getMe, getUsuarios } from "../../Utils/Login";
-import UpdateUsuario from "../../components/Update/UpdateUsuario";
+import UpdateUsuario from "./UpdateUsuario";
 
 function UsuariosMain() {
   const [busca, setBusca] = useState([]);

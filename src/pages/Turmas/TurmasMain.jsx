@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import FormTurma from "../../components/Cadastros/FormTurma";
-
-import UpdateTurma from "../../components/Update/UpdateTurma";
 import { deleteTurma, getTurma } from "../../Utils/Turma";
 import { getTurno } from "../../Utils/Turno";
 import { getTipo_ensino } from "../../Utils/TipoEnsino";
+
+import FormTurma from "./FormTurma";
+import UpdateTurma from "./UpdateTurma";
 
 function TurmasMain() {
   const [busca, setBusca] = useState([]);

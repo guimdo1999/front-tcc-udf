@@ -4,8 +4,8 @@ import { deleteAluno, getAluno } from "../../Utils/Aluno";
 import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import UpdateAluno from "../../components/Update/UpdateAluno";
-import FormAluno from "../../components/Cadastros/FormAluno";
+import UpdateAluno from "./UpdateAluno";
+import FormAluno from "./FormAluno";
 
 function AlunosMain() {
   const [busca, setBusca] = useState([]);

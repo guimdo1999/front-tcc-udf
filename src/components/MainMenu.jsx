@@ -117,6 +117,10 @@ function MainMenu() {
               <Link to={`/main/leciona`} />
               Leciona
             </Menu.Item>
+            <Menu.Item key="9" icon={<UserSwitchOutlined />}>
+              <Link to={`/main/aulas`} />
+              Aulas
+            </Menu.Item>
           </SubMenu>
           <SubMenu key="subTurmas" title="Turmas" icon={<FormOutlined />}>
             <Menu.Item key="6" icon={<TeamOutlined />}>
@@ -131,20 +135,17 @@ function MainMenu() {
               <Link to={`/main/turmas`} />
               Turmas
             </Menu.Item>
+            <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
+              <Link to={`/main/alunos`} />
+              Alunos
+            </Menu.Item>
           </SubMenu>
-          <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
-            <Link to={`/main/alunos`} />
-            Alunos
-          </Menu.Item>
 
           <Menu.Item key="8" icon={<FieldTimeOutlined />}>
             <Link to={`/main/horarios`} />
             Horários
           </Menu.Item>
-          <Menu.Item key="9" icon={<UserSwitchOutlined />}>
-            <Link to={`/main/aulas`} />
-            Aulas
-          </Menu.Item>
+
           <Menu.Item key="10" icon={<UserSwitchOutlined />}>
             <Link to={`/main/usuarios`} />
             Gerenciar Usuários

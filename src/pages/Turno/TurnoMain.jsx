@@ -4,8 +4,8 @@ import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
 import { deleteTurno, getTurno } from "../../Utils/Turno";
-import UpdateTurno from "../../components/Update/UpdateTurno";
-import FormTurno from "../../components/Cadastros/FormTurno";
+import UpdateTurno from "./UpdateTurno";
+import FormTurno from "./FormTurno";
 
 function TurnoMain() {
   const [busca, setBusca] = useState([]);

@@ -6,8 +6,8 @@ import { getTurma } from "../../Utils/Turma";
 import { getProfessor } from "../../Utils/Professor";
 import { deleteAula, getAulas } from "../../Utils/Aulas";
 import { getDisciplina } from "../../Utils/Disciplina";
-import UpdateAulas from "../../components/Update/UpdateAulas";
-import FormAulas from "../../components/Cadastros/FormAulas";
+import FormAulas from "./FormAulas";
+import UpdateAulas from "./UpdateAulas";
 
 function AulasMain() {
   const [busca, setBusca] = useState([]);
@@ -194,23 +194,6 @@ function AulasMain() {
       <br></br>
       <br></br>
       {modalContent}
-      {/* <Search
-        placeholder="Pesquisar por Disciplina"
-        allowClear
-        onChange={(e) => {
-          const valorAtual = e.target.value.toLocaleLowerCase();
-          setValueF(valorAtual);
-          const filteredData = busca.filter((entry) =>
-            entry.nome_turma.toLocaleLowerCase().includes(valorAtual)
-          );
-          setBusca(filteredData);
-        }}
-        style={{
-          width: "45%",
-          float: "right",
-          margin: "5px",
-        }}
-      /> */}
 
       <Table
         columns={columns}

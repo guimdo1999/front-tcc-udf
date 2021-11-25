@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
-import FormHorario from "../../components/Cadastros/FormHorario";
-
 import { deleteHorario, getHorario } from "../../Utils/Horario";
-import UpdateHorario from "../../components/Update/UpdateHorario";
+
+import FormHorario from "./FormHorario";
+import UpdateHorario from "./UpdateHorario";
 
 function HorariosMain() {
   const [busca, setBusca] = useState([]);

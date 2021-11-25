@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
-import FormDisciplina from "../../components/Cadastros/FormDisciplina";
-import UpdateDisciplina from "../../components/Update/UpdateDisciplina";
+import FormDisciplina from "./FormDisciplina";
+import UpdateDisciplina from "./UpdateDisciplina";
 
 import { deleteDisciplina, getDisciplina } from "../../Utils/Disciplina";
 
