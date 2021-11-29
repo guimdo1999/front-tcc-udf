@@ -10,7 +10,7 @@ const Registrar = () => {
     if (values.cod_senha !== values.cod_senha2) {
       alert("Senhas não coincidem!");
     } else {
-      register(values.cod_login, values.cod_senha, "Usuário").then(() => {
+      register(values.cod_login, values.cod_senha, "Admin").then(() => {
         history.push("/");
       });
     }

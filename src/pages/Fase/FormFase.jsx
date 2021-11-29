@@ -1,11 +1,11 @@
 import React from "react";
-import { Form, Input, Button, Select, message, InputNumber } from "antd";
-import { insertProfessor, putProfessorId } from "../../Utils/Professor";
+import { Form, Input, Button, Select, message } from "antd";
+import { insertFase, putFaseId } from "../../Utils/Fase";
 
-function FormProfessor({ handleOk, professor }) {
+function FormFase({ handleOk, fase }) {
   const layout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 12 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 9 },
   };
 
   /* eslint-disable no-template-curly-in-string */
@@ -15,12 +15,12 @@ function FormProfessor({ handleOk, professor }) {
 
   const key = "updatable";
   const onFinish = (values) => {
-    if (!professor) {
+    if (!fase) {
       message.loading({
-        content: `Criando Professor: ${values.nome_professor}.`,
+        content: `Cadastrando a Fase: ${values.nome_fase}.`,
         key,
       });
-      insertProfessor(values)
+      insertFase(values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });
           handleOk();
@@ -30,11 +30,10 @@ function FormProfessor({ handleOk, professor }) {
         });
     } else {
       message.loading({
-        content: `Editando o Professor: ${values.nome_professor}.`,
+        content: `Editando o Fase: ${values.nome_fase}.`,
         key,
       });
-      console.log(professor.id_professor);
-      putProfessorId(professor.id_professor, values)
+      putFaseId(fase.id_fase, values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });
           handleOk();
@@ -51,43 +50,24 @@ function FormProfessor({ handleOk, professor }) {
       onFinish={onFinish}
       validateMessages={validateMessages}
       initialValues={{
-        nome_professor: professor?.nome_professor,
-        qtd_horas_trabalho: professor?.qtd_horas_trabalho,
-        matricula: professor?.matricula,
-        email_professor: professor?.email_professor,
-        is_active: professor?.is_active,
+        nome_fase: fase?.nome_fase,
+        is_active: fase?.is_active,
       }}
     >
       <Form.Item
-        name={"nome_professor"}
-        label="Nome Professor"
+        name={"nome_fase"}
+        label="Nome da Fase"
         rules={[{ required: true }]}
       >
-        <Input placeholder="EX: Jamilton Damasceno" />
+        <Input placeholder="EX: Segunda, terça, quarta..." />
       </Form.Item>
 
       <Form.Item
-        name={"qtd_horas_trabalho"}
-        label="Horas/semana"
-        rules={[{ required: true }]}
-      >
-        <InputNumber placeholder="EX: 40" />
-      </Form.Item>
-
-      <Form.Item
-        name={"email_professor"}
-        label="Email"
-        rules={[{ required: true }]}
-      >
-        <Input placeholder="EX: jamasceno25@gmail.com" />
-      </Form.Item>
-
-      <Form.Item
-        name={"is_active"}
         label="Está ativo"
+        name={"is_active"}
         rules={[{ required: true }]}
       >
-        <Select style={{ width: "100%" }} placeholder="Está ativo">
+        <Select style={{ width: "100%" }} placeholder="Está ativo?">
           <Select.Option value="Sim">Sim</Select.Option>
           <Select.Option value="Não">Não</Select.Option>
         </Select>
@@ -102,4 +82,4 @@ function FormProfessor({ handleOk, professor }) {
   );
 }
 
-export default FormProfessor;
+export default FormFase;

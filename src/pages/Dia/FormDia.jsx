@@ -1,11 +1,11 @@
 import React from "react";
-import { Form, Input, Button, Select, message, InputNumber } from "antd";
-import { insertProfessor, putProfessorId } from "../../Utils/Professor";
+import { Form, Input, Button, Select, message } from "antd";
+import { insertDia, putDiaId } from "../../Utils/Dia";
 
-function FormProfessor({ handleOk, professor }) {
+function FormDia({ handleOk, dia }) {
   const layout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 12 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 9 },
   };
 
   /* eslint-disable no-template-curly-in-string */
@@ -15,12 +15,12 @@ function FormProfessor({ handleOk, professor }) {
 
   const key = "updatable";
   const onFinish = (values) => {
-    if (!professor) {
+    if (!dia) {
       message.loading({
-        content: `Criando Professor: ${values.nome_professor}.`,
+        content: `Cadastrando o Dia: ${values.nome_dia}.`,
         key,
       });
-      insertProfessor(values)
+      insertDia(values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });
           handleOk();
@@ -29,12 +29,8 @@ function FormProfessor({ handleOk, professor }) {
           message.error({ content: `Falha ao comunicar com o servidor.`, key });
         });
     } else {
-      message.loading({
-        content: `Editando o Professor: ${values.nome_professor}.`,
-        key,
-      });
-      console.log(professor.id_professor);
-      putProfessorId(professor.id_professor, values)
+      message.loading({ content: `Editando o Dia: ${values.nome_dia}.`, key });
+      putDiaId(dia.id_dia, values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });
           handleOk();
@@ -51,43 +47,24 @@ function FormProfessor({ handleOk, professor }) {
       onFinish={onFinish}
       validateMessages={validateMessages}
       initialValues={{
-        nome_professor: professor?.nome_professor,
-        qtd_horas_trabalho: professor?.qtd_horas_trabalho,
-        matricula: professor?.matricula,
-        email_professor: professor?.email_professor,
-        is_active: professor?.is_active,
+        nome_dia: dia?.nome_dia,
+        is_active: dia?.is_active,
       }}
     >
       <Form.Item
-        name={"nome_professor"}
-        label="Nome Professor"
+        name={"nome_dia"}
+        label="Nome do Dia"
         rules={[{ required: true }]}
       >
-        <Input placeholder="EX: Jamilton Damasceno" />
+        <Input placeholder="EX: Segunda, terça, quarta..." />
       </Form.Item>
 
       <Form.Item
-        name={"qtd_horas_trabalho"}
-        label="Horas/semana"
-        rules={[{ required: true }]}
-      >
-        <InputNumber placeholder="EX: 40" />
-      </Form.Item>
-
-      <Form.Item
-        name={"email_professor"}
-        label="Email"
-        rules={[{ required: true }]}
-      >
-        <Input placeholder="EX: jamasceno25@gmail.com" />
-      </Form.Item>
-
-      <Form.Item
+        label="Está ativo?"
         name={"is_active"}
-        label="Está ativo"
         rules={[{ required: true }]}
       >
-        <Select style={{ width: "100%" }} placeholder="Está ativo">
+        <Select style={{ width: "100%" }} placeholder="Está ativo?">
           <Select.Option value="Sim">Sim</Select.Option>
           <Select.Option value="Não">Não</Select.Option>
         </Select>
@@ -102,4 +79,4 @@ function FormProfessor({ handleOk, professor }) {
   );
 }
 
-export default FormProfessor;
+export default FormDia;

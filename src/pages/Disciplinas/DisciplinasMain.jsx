@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 
 import FormDisciplina from "./FormDisciplina";
-import UpdateDisciplina from "./UpdateDisciplina";
 
 import { deleteDisciplina, getDisciplina } from "../../Utils/Disciplina";
+import DeletePop from "../../components/DeletePop";
 
 function DisciplinasMain() {
   const [busca, setBusca] = useState([]);
-  const [disciplina, setDisciplina] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
@@ -28,8 +28,24 @@ function DisciplinasMain() {
     setReload(false);
     setModalContent("");
   };
-
   /**/
+
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteDisciplina(value.id_disciplina)
+      .then(() => {
+        message.success({
+          content: `Disciplina: ${value.nome_disciplina} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
+  };
+  /*Pop*/
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
@@ -42,7 +58,7 @@ function DisciplinasMain() {
 
   const columns = [
     {
-      title: "Nome do disciplina",
+      title: "Nome da disciplina",
       dataIndex: "nome_disciplina",
       key: "nome_disciplina",
 
@@ -53,20 +69,22 @@ function DisciplinasMain() {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Aula exclusiva",
-      dataIndex: "aula_exclusiva",
-      key: "aula_exclusiva",
+      title: "Está ativa",
+      dataIndex: "is_active",
+      key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
     },
-    {
-      title: "Quantidade de carga horária",
-      dataIndex: "qtd_carga_horaria",
-      key: "qtd_carga_horaria",
-    },
-    {
-      title: "Quantia de Aulas Semanais",
-      dataIndex: "qtd_aulas",
-      key: "qtd_aulas",
-    },
+
     {
       title: "Ações",
       key: "id_disciplina",
@@ -75,8 +93,6 @@ function DisciplinasMain() {
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setDisciplina(record);
               setModalContent(
                 <Modal
                   title={`Editando a Disciplina: ${record.nome_disciplina}`}
@@ -84,10 +100,7 @@ function DisciplinasMain() {
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateDisciplina
-                    disciplina={disciplina}
-                    handleOk={handleOk}
-                  />
+                  <FormDisciplina handleOk={handleOk} disciplina={record} />
                 </Modal>
               );
 
@@ -96,43 +109,11 @@ function DisciplinasMain() {
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletando a disciplina: ${record.nome_disciplina}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>
-                    Gostaria mesmo de deletar a disciplina{" "}
-                    {record.nome_disciplina}?
-                  </h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteDisciplina(record.id_disciplina).then(() => {
-                        alert(
-                          `Deletado o Disciplina: ${record.nome_disciplina}`
-                        );
-
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },

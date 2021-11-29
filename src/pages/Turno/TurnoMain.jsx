@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
+import DeletePop from "../../components/DeletePop";
 
 import { deleteTurno, getTurno } from "../../Utils/Turno";
-import UpdateTurno from "./UpdateTurno";
+
 import FormTurno from "./FormTurno";
 
 function TurnoMain() {
   const [busca, setBusca] = useState([]);
-  const [turno, setTurno] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -27,8 +27,25 @@ function TurnoMain() {
     setModalContent("");
     setReload(false);
   };
+  /*MODAL*/
 
-  /**/
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteTurno(value.id_turno)
+      .then(() => {
+        message.success({
+          content: `Turno: ${value.nome_turno} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
+  };
+
+  /*Pop*/
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
@@ -41,7 +58,7 @@ function TurnoMain() {
 
   const columns = [
     {
-      title: "Nome do Tipo de Ensino",
+      title: "Nome do Turno",
       dataIndex: "nome_turno",
       key: "nome_turno",
 
@@ -51,6 +68,22 @@ function TurnoMain() {
       sortDirections: ["descend", "ascend"],
     },
     {
+      title: "Está Ativo",
+      dataIndex: "is_active",
+      key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
+    },
+    {
       title: "Ações",
       key: "id_turno",
       render: (record) => (
@@ -58,8 +91,6 @@ function TurnoMain() {
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setTurno(record);
               setModalContent(
                 <Modal
                   title={`Editando o Turno: ${record.nome_turno}`}
@@ -67,50 +98,20 @@ function TurnoMain() {
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateTurno turno={turno} handleOk={handleOk} />
+                  <FormTurno turno={record} handleOk={handleOk} />
                 </Modal>
               );
-
               setVisible(true);
             }}
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletando o Tipo de Ensino: ${record.nome_turno}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>
-                    Gostaria mesmo de deletar o tipo de Ensino{" "}
-                    {record.nome_turno}?
-                  </h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteTurno(record.id_turno).then(() => {
-                        alert(`Deletado o Turno: ${record.nome_turno}`);
 
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },
@@ -148,7 +149,7 @@ function TurnoMain() {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_tipo_ensino.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_turno.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}

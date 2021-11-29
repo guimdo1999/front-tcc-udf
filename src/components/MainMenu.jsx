@@ -16,7 +16,9 @@ import {
   FormOutlined,
   BellOutlined,
 } from "@ant-design/icons";
+import SubMenu from "antd/lib/menu/SubMenu";
 import { getMe, logout } from "../Utils/Login";
+import { cookies } from "../pages/Login/Login";
 
 import AlunosMain from "../pages/Alunos/AlunosMain";
 import DisciplinasMain from "../pages/Disciplinas/DisciplinasMain";
@@ -25,14 +27,17 @@ import TurmasMain from "../pages/Turmas/TurmasMain";
 import HorariosMain from "../pages/Horarios/HorariosMain";
 import Home from "../pages/Home";
 
-import { cookies } from "../pages/Login/Login";
 import UsuariosMain from "../pages/Usuarios/UsuariosMain";
-import SubMenu from "antd/lib/menu/SubMenu";
-import TipoEnsinoMain from "../pages/TipoEnsino/TipoEnsinoMain";
 import LecionaMain from "../pages/Leciona/LecionaMain";
 import Page404 from "../pages/Page404";
 import TurnoMain from "../pages/Turno/TurnoMain";
 import AulasMain from "../pages/Aulas/AulasMain";
+import AnoMain from "../pages/Ano/AnoMain";
+import DiaMain from "../pages/Dia/DiaMain";
+import FaseMain from "../pages/Fase/FaseMain";
+import SerieMain from "../pages/Serie/SerieMain";
+import MateriaMain from "../pages/Materia/MateiraMain";
+import MatriculaMain from "../pages/Matricular/MatriculaMain";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -52,9 +57,11 @@ function MainMenu() {
             break;
           default:
             console.log("");
+            break;
         }
       })
       .catch((err) => {
+        console.log(err);
         history.push("/");
       });
   }, []);
@@ -95,63 +102,80 @@ function MainMenu() {
         </Header>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["0"]}>
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
-          <Menu.Item key="0" icon={<BorderlessTableOutlined />}>
+          <Menu.Item key="home" icon={<BorderlessTableOutlined />}>
             <Link to={`/main/home`} />
             Home
           </Menu.Item>
 
           <SubMenu key="subLeciona" title="Ensino" icon={<FormOutlined />}>
-            <Menu.Item
-              key="2"
-              icon={<VideoCameraOutlined />}
-              href="/disciplinas"
-            >
+            <Menu.Item key="disciplinas" icon={<VideoCameraOutlined />}>
               <Link to={`/main/disciplinas`} />
               Disciplinas
             </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
+            <Menu.Item key="professores" icon={<UploadOutlined />}>
               <Link to={`/main/professores`} />
               Professores
             </Menu.Item>
-            <Menu.Item key="4" icon={<BellOutlined />}>
+            <Menu.Item key="leciona" icon={<BellOutlined />}>
               <Link to={`/main/leciona`} />
               Leciona
             </Menu.Item>
-            <Menu.Item key="9" icon={<UserSwitchOutlined />}>
+            <Menu.Item key="aulas" icon={<UserSwitchOutlined />}>
               <Link to={`/main/aulas`} />
               Aulas
             </Menu.Item>
           </SubMenu>
           <SubMenu key="subTurmas" title="Turmas" icon={<FormOutlined />}>
-            <Menu.Item key="6" icon={<TeamOutlined />}>
-              <Link to={`/main/tipo_ensino`} />
-              Tipo de Ensino
-            </Menu.Item>
-            <Menu.Item key="7" icon={<TeamOutlined />}>
+            <Menu.Item key="turnos" icon={<TeamOutlined />}>
               <Link to={`/main/turnos`} />
               Turnos
             </Menu.Item>
-            <Menu.Item key="5" icon={<TeamOutlined />}>
+            <Menu.Item key="turmas" icon={<TeamOutlined />}>
               <Link to={`/main/turmas`} />
               Turmas
             </Menu.Item>
-            <Menu.Item key="1" icon={<UserOutlined />} href="/alunos">
+            <Menu.Item key="alunos" icon={<UserOutlined />}>
               <Link to={`/main/alunos`} />
               Alunos
             </Menu.Item>
+            <Menu.Item key="serie" icon={<UserOutlined />}>
+              <Link to={`/main/serie`} />
+              Serie
+            </Menu.Item>
           </SubMenu>
 
-          <Menu.Item key="8" icon={<FieldTimeOutlined />}>
+          <Menu.Item key="materia" icon={<UserOutlined />} href="/alunos">
+            <Link to={`/main/materia`} />
+            Matéria
+          </Menu.Item>
+          <Menu.Item key="horarios" icon={<FieldTimeOutlined />}>
             <Link to={`/main/horarios`} />
             Horários
           </Menu.Item>
+          <Menu.Item key="dia" icon={<FieldTimeOutlined />}>
+            <Link to={`/main/dia`} />
+            Dia
+          </Menu.Item>
+          <Menu.Item key="ano" icon={<FieldTimeOutlined />}>
+            <Link to={`/main/ano`} />
+            Ano
+          </Menu.Item>
+          <Menu.Item key="fase" icon={<FieldTimeOutlined />}>
+            <Link to={`/main/fase`} />
+            Fase
+          </Menu.Item>
+          <Menu.Item key="matricula" icon={<FieldTimeOutlined />}>
+            <Link to={`/main/matricula`} />
+            Matricular
+          </Menu.Item>
 
-          <Menu.Item key="10" icon={<UserSwitchOutlined />}>
+          <Menu.Item key="usuario" icon={<UserSwitchOutlined />}>
             <Link to={`/main/usuarios`} />
             Gerenciar Usuários
           </Menu.Item>
         </Menu>
       </Sider>
+
       <Layout>
         <Header
           className="site-layout-sub-header-background"
@@ -187,9 +211,7 @@ function MainMenu() {
             <Route path={`/main/turmas`}>
               <TurmasMain />
             </Route>
-            <Route path={`/main/tipo_ensino`}>
-              <TipoEnsinoMain />
-            </Route>
+
             <Route path={`/main/turnos`}>
               <TurnoMain />
             </Route>
@@ -201,6 +223,24 @@ function MainMenu() {
             </Route>
             <Route path={`/main/aulas`}>
               <AulasMain />
+            </Route>
+            <Route path={`/main/ano`}>
+              <AnoMain />
+            </Route>
+            <Route path={`/main/dia`}>
+              <DiaMain />
+            </Route>
+            <Route path={`/main/fase`}>
+              <FaseMain />
+            </Route>
+            <Route path={`/main/serie`}>
+              <SerieMain />
+            </Route>
+            <Route path={`/main/materia`}>
+              <MateriaMain />
+            </Route>
+            <Route path={`/main/matricula`}>
+              <MatriculaMain />
             </Route>
             <Route>
               <Page404 />

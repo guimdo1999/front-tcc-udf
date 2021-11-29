@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Input, Button, Select, message } from "antd";
-import { insertDisciplina, putDisciplinaId } from "../../Utils/Disciplina";
+import { insertAno, putAnoId } from "../../Utils/Ano";
 
-function FormDisciplina({ handleOk, disciplina }) {
+function FormAno({ handleOk, ano }) {
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 9 },
@@ -15,12 +15,9 @@ function FormDisciplina({ handleOk, disciplina }) {
 
   const key = "updatable";
   const onFinish = (values) => {
-    if (!disciplina) {
-      message.loading({
-        content: `Criando Disciplina: ${values.nome_disciplina}.`,
-        key,
-      });
-      insertDisciplina(values)
+    if (!ano) {
+      message.loading({ content: `Criando Ano: ${values.nome_ano}.`, key });
+      insertAno(values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });
           handleOk();
@@ -29,11 +26,8 @@ function FormDisciplina({ handleOk, disciplina }) {
           message.error({ content: `Falha ao comunicar com o servidor.`, key });
         });
     } else {
-      message.loading({
-        content: `Editando o Disciplina: ${values.nome_disciplina}.`,
-        key,
-      });
-      putDisciplinaId(disciplina.id_disciplina, values)
+      message.loading({ content: `Editando o Ano: ${values.nome_ano}.`, key });
+      putAnoId(ano.id_ano, values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });
           handleOk();
@@ -50,13 +44,13 @@ function FormDisciplina({ handleOk, disciplina }) {
       onFinish={onFinish}
       validateMessages={validateMessages}
       initialValues={{
-        nome_disciplina: disciplina?.nome_disciplina,
-        is_active: disciplina?.is_active,
+        nome_ano: ano?.nome_ano,
+        is_active: ano?.is_active,
       }}
     >
       <Form.Item
-        name={"nome_disciplina"}
-        label="Nome Disciplina"
+        name={"nome_ano"}
+        label="Nome Ano"
         rules={[{ required: true }]}
       >
         <Input placeholder="EX: 1ºAno / Primeiro ano / Ano Um" />
@@ -82,4 +76,4 @@ function FormDisciplina({ handleOk, disciplina }) {
   );
 }
 
-export default FormDisciplina;
+export default FormAno;

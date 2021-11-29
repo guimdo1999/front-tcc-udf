@@ -4,13 +4,11 @@ import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 import DeletePop from "../../components/DeletePop";
 
-import { deleteTurma, getTurma } from "../../Utils/Turma";
+import { deleteAno, getAno } from "../../Utils/Ano";
 
-import FormTurma from "./FormTurma";
+import FormAno from "./FormAno";
 
-import moment from "moment";
-
-function TurmasMain() {
+function AnoMain() {
   const [busca, setBusca] = useState([]);
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
@@ -33,10 +31,10 @@ function TurmasMain() {
 
   /*Pop*/
   const handlePopOk = (value) => {
-    deleteTurma(value.id_turma)
+    deleteAno(value.id_ano)
       .then(() => {
         message.success({
-          content: `Turma: ${value.nome_turma} foi deletado.`,
+          content: `Ano: ${value.nome_ano} foi deletado.`,
           key,
         });
         handleOk();
@@ -51,7 +49,7 @@ function TurmasMain() {
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
-      getTurma().then((data) => {
+      getAno().then((data) => {
         setBusca(data);
         setReload(false);
       });
@@ -60,43 +58,15 @@ function TurmasMain() {
 
   const columns = [
     {
-      title: "Nome da Turma",
-      dataIndex: "nome_turma",
-      key: "nome_turma",
+      title: "Nome do Ano",
+      dataIndex: "nome_ano",
+      key: "nome_ano",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_turma.localeCompare(b.nome_turma),
+      sorter: (a, b) => a.nome_ano.localeCompare(b.nome_ano),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Data de Inicio",
-      dataIndex: "data_inicio",
-      key: "data_inicio",
-      render: (data) => {
-        return moment(data).format("DD/MM/YYYY");
-      },
-    },
-    {
-      title: "Data de Fim",
-      dataIndex: "data_fim",
-      key: "data_fim",
-      render: (data) => {
-        return moment(data).format("DD/MM/YYYY");
-      },
-    },
-    {
-      title: "Série",
-      dataIndex: "Series",
-      key: "Series",
-      render: (Series) => {
-        if (Series) {
-          return Series.nome_serie;
-        } else {
-          return null;
-        }
-      },
     },
     {
       title: "Está Ativo",
@@ -116,7 +86,7 @@ function TurmasMain() {
     },
     {
       title: "Ações",
-      key: "id_turma",
+      key: "id_ano",
       render: (record) => (
         <Space size="middle">
           <Button
@@ -124,12 +94,12 @@ function TurmasMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Editando a Turma: ${record.nome_turma}`}
+                  title={`Editando o Ano: ${record.nome_ano}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <FormTurma turma={record} handleOk={handleOk} />
+                  <FormAno ano={record} handleOk={handleOk} />
                 </Modal>
               );
               setVisible(true);
@@ -149,39 +119,39 @@ function TurmasMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Turmas" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Anos" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando nova Turma:`}
+                title={`Cadastrando novo Ano:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormTurma handleOk={handleOk} />
+                <FormAno handleOk={handleOk} />
               </Modal>
             );
 
             setVisible(true);
           }}
         >
-          Cadastrar Turma
+          Cadastrar Ano
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por Turma"
+        placeholder="Pesquisar por Ano"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_turma.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_ano.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -198,22 +168,18 @@ function TurmasMain() {
         dataSource={busca}
         showSorterTooltip={false}
         footer={() => {
-          if (busca) {
-            if (!valueF) {
-              return (
-                <h5>
-                  Existem <b>{busca.length}</b> resultados.
-                </h5>
-              );
-            } else {
-              return (
-                <h5>
-                  Existem <b>{busca.length}</b> resultados para {valueF}.
-                </h5>
-              );
-            }
+          if (!valueF) {
+            return (
+              <h5>
+                Existem <b>{busca.length}</b> resultados.
+              </h5>
+            );
           } else {
-            return <h5>Não existem resultados.</h5>;
+            return (
+              <h5>
+                Existem <b>{busca.length}</b> resultados para {valueF}.
+              </h5>
+            );
           }
         }}
       />
@@ -221,4 +187,4 @@ function TurmasMain() {
   );
 }
 
-export default TurmasMain;
+export default AnoMain;

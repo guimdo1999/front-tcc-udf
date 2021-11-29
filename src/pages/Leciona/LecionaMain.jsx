@@ -35,7 +35,6 @@ function LecionaMain() {
     if (valueF === "" || reload === true) {
       getEnsino().then((data) => {
         setBusca(data);
-        setReload(false);
       });
       getProfessor().then((data) => {
         setProfessor(data);
@@ -43,21 +42,11 @@ function LecionaMain() {
       getDisciplina().then((data) => {
         setDisciplina(data);
       });
+      setReload(false);
     }
   }, [valueF, reload]);
 
   const columns = [
-    /* {
-      title: "Numero",
-      dataIndex: "id_ensino",
-      key: "id_ensino",
-
-      render: (text) => <p>{text}</p>,
-
-      sorter: (a, b) => a.id_ensino.localeCompare(b.id_ensino),
-      defaultSortOrder: "ascend",
-      sortDirections: ["descend", "ascend"],
-    }, */
     {
       title: "Nome do Professor",
       dataIndex: "id_professor",

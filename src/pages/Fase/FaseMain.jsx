@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
+import { deleteFase, getFase } from "../../Utils/Fase";
 
-import { deleteTipo_ensino, getTipo_ensino } from "../../Utils/TipoEnsino";
-import FormTipoEnsino from "./FormTipoEnsino";
-import UpdateTipoEnsino from "./UpdateTipoEnsino";
+import FormFase from "./FormFase";
+import DeletePop from "../../components/DeletePop";
 
-function TipoEnsinoMain() {
+function FaseMain() {
   const [busca, setBusca] = useState([]);
-  const [tipoEnsino, setTipoEnsino] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -27,12 +26,29 @@ function TipoEnsinoMain() {
     setModalContent("");
     setReload(false);
   };
+  /*MODAL*/
 
-  /**/
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteFase(value.id_fase)
+      .then(() => {
+        message.success({
+          content: `Fase: ${value.nome_fase} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
+  };
+
+  /*Pop*/
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
-      getTipo_ensino().then((data) => {
+      getFase().then((data) => {
         setBusca(data);
         setReload(false);
       });
@@ -41,125 +57,99 @@ function TipoEnsinoMain() {
 
   const columns = [
     {
-      title: "Nome do Tipo de Ensino",
-      dataIndex: "nome_tipo_ensino",
-      key: "nome_tipo_ensino",
+      title: "Nome da Fase",
+      dataIndex: "nome_fase",
+      key: "nome_fase",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_tipo_ensino.localeCompare(b.nome_tipo_ensino),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Está ativo?",
+      title: "Está Ativo",
       dataIndex: "is_active",
       key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
     },
     {
       title: "Ações",
-      key: "id_tipo_ensino",
+      key: "id_fase",
       render: (record) => (
         <Space size="middle">
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setTipoEnsino(record);
               setModalContent(
                 <Modal
-                  title={`Editando o Tipo de Ensino: ${record.nome_tipo_ensino}`}
+                  title={`Editando a fase: ${record.nome_fase}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateTipoEnsino
-                    tipo_ensino={tipoEnsino}
-                    handleOk={handleOk}
-                  />
+                  <FormFase fase={record} handleOk={handleOk} />
                 </Modal>
               );
-
               setVisible(true);
+              setReload(true);
             }}
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletando o Tipo de Ensino: ${record.nome_tipo_ensino}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>
-                    Gostaria mesmo de deletar o tipo de Ensino{" "}
-                    {record.nome_tipo_ensino}?
-                  </h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteTipo_ensino(record.id_tipo_ensino).then(() => {
-                        alert(
-                          `Deletado o Tipo de Ensino: ${record.nome_tipo_ensino}`
-                        );
 
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },
   ];
   return (
-    <Card title="Gerenciamento de Tipos de Ensino" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Fases" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando novo Tipo de Ensino:`}
+                title={`Cadastrando nova Fase:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormTipoEnsino handleOk={handleOk} />
+                <FormFase handleOk={handleOk} />
               </Modal>
             );
 
             setVisible(true);
           }}
         >
-          Cadastrar Tipo de Ensino
+          Cadastrar Fase
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por Tipo de Ensino"
+        placeholder="Pesquisar por Fase"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_tipo_ensino.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_fase.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -195,4 +185,4 @@ function TipoEnsinoMain() {
   );
 }
 
-export default TipoEnsinoMain;
+export default FaseMain;

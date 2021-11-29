@@ -1,100 +1,123 @@
-import React, { useEffect, useState } from "react";
-import { Form, Input, InputNumber, Button, Select, DatePicker } from "antd";
-import { insertAluno } from "../../Utils/Aluno";
-import { getTurma } from "../../Utils/Turma";
+import React from "react";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  message,
+  DatePicker,
+  InputNumber,
+} from "antd";
+import { insertAluno, putAlunoId } from "../../Utils/Aluno";
 
-function FormAluno({ handleOk }) {
-  const [turma, setTurma] = useState([]);
+import moment from "moment";
+
+function FormAluno({ handleOk, aluno }) {
   const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 9 },
+    labelCol: { span: 9 },
+    wrapperCol: { span: 12 },
   };
-  const dateFormat = "DD/MM/YYYY";
-
-  useEffect(() => {
-    getTurma().then((data) => {
-      setTurma(data);
-    });
-  }, []);
 
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
     types: {
-      email: "${label} não é um e-mail válido!",
-      number: "${label} não é um número válido!",
+      email: "${label} não é um email válido!",
     },
   };
 
-  const onFinish = (values) => {
-    values.data_nascimento = values.data_nascimento.toISOString().split("T")[0];
+  const format = "DD/MM/YYYY";
 
-    insertAluno(values).then(() => {
-      alert(`Cadastrado o aluno: ${values.nome_aluno}`);
-      handleOk();
-    });
+  const key = "updatable";
+  const onFinish = (values) => {
+    if (!aluno) {
+      message.loading({ content: `Criando Aluno: ${values.nome_aluno}.`, key });
+      insertAluno(values)
+        .then((resposta) => {
+          message.success({ content: resposta.message, key, duration: 2 });
+          handleOk();
+        })
+        .catch(() => {
+          message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        });
+    } else {
+      message.loading({
+        content: `Editando o Aluno: ${values.nome_aluno}.`,
+        key,
+      });
+      putAlunoId(aluno.id_aluno, values)
+        .then((resposta) => {
+          message.success({ content: resposta.message, key, duration: 2 });
+          handleOk();
+        })
+        .catch(() => {
+          message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        });
+    }
   };
 
+  if (aluno) {
+    var data_birth = moment(aluno.data_nascimento);
+  }
   return (
     <Form
       {...layout}
       name="nest-messages"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      initialValues={{
+        nome_aluno: aluno?.nome_aluno,
+        cod_sexo: aluno?.cod_sexo,
+        data_nascimento: data_birth,
+        matricula: aluno?.matricula,
+        email_aluno: aluno?.email_aluno,
+        is_active: aluno?.is_active,
+      }}
     >
-      <Form.Item name={"nome_aluno"} label="Nome" rules={[{ required: true }]}>
-        <Input placeholder="EX: Rogério Silva de Souza" />
+      <Form.Item
+        name={"nome_aluno"}
+        label="Nome Aluno"
+        rules={[{ required: true }]}
+      >
+        <Input placeholder="EX: 1ºAluno / Primeiro aluno / Aluno Um" />
       </Form.Item>
 
-      <Form.Item label="Sexo" name={"sexo"} required>
-        <Select style={{ width: "100%" }} placeholder="Selecione um gênero">
+      <Form.Item
+        label="Mátricula"
+        name={"matricula"}
+        rules={[{ required: true }]}
+      >
+        <InputNumber placeholder="EX: 27886542" width="100%" />
+      </Form.Item>
+
+      <Form.Item
+        name={"data_nascimento"}
+        label="Data de Nascimento"
+        rules={[{ required: true }]}
+      >
+        <DatePicker format={format} />
+      </Form.Item>
+
+      <Form.Item label="Sexo" name={"cod_sexo"} rules={[{ required: true }]}>
+        <Select style={{ width: "100%" }} placeholder="Selecione um sexo">
           <Select.Option value="M">Masculino</Select.Option>
           <Select.Option value="F">Feminino</Select.Option>
         </Select>
       </Form.Item>
 
-      <Form.Item label="Nascimento" name={"data_nascimento"} required>
-        <DatePicker
-          placeholder="Selecione a data"
-          style={{ width: "100%" }}
-          format={dateFormat}
-        />
-      </Form.Item>
-
-      <Form.Item name={"id_turma"} label="Turma:" rules={[{ required: true }]}>
-        <Select style={{ width: "100%" }} placeholder="Selecione uma turma">
-          {turma.map((item) => {
-            return (
-              <Select.Option value={item.id_turma}>
-                {item.nome_turma}
-              </Select.Option>
-            );
-          })}
-        </Select>
+      <Form.Item label="Email" name={"email_aluno"} rules={[{ type: "email" }]}>
+        <Input placeholder="EX: 27886542" />
       </Form.Item>
 
       <Form.Item
-        name={"matricula"}
-        label="Mátricula"
-        rules={[{ type: "number", required: true }]}
+        label="Está ativo"
+        name={"is_active"}
+        rules={[{ required: true }]}
       >
-        <InputNumber style={{ width: "100%" }} />
-      </Form.Item>
-      <Form.Item label="Está ativo" name={"is_active"} required>
-        <Select style={{ width: "100%" }} placeholder="Selecione sim ou não">
+        <Select style={{ width: "100%" }} placeholder="Está ativo?">
           <Select.Option value="Sim">Sim</Select.Option>
           <Select.Option value="Não">Não</Select.Option>
         </Select>
-      </Form.Item>
-      <Form.Item
-        name={"telefone"}
-        label="Telefone"
-        rules={[{ type: "number" }]}
-      >
-        <InputNumber style={{ width: "100%" }} placeholder="61981234567" />
-      </Form.Item>
-      <Form.Item name={"email"} label="E-mail" rules={[{ type: "email" }]}>
-        <Input style={{ width: "100%" }} placeholder="email@email.com" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 18 }}>

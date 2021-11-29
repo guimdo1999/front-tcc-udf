@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
 import { deleteHorario, getHorario } from "../../Utils/Horario";
 
 import FormHorario from "./FormHorario";
-import UpdateHorario from "./UpdateHorario";
+import DeletePop from "../../components/DeletePop";
+import moment from "moment";
 
 function HorariosMain() {
   const [busca, setBusca] = useState([]);
-  const [horario, setHorario] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -24,11 +24,28 @@ function HorariosMain() {
   };
 
   const handleCancel = () => {
-    setReload(false);
     setModalContent("");
+    setReload(false);
   };
+  /*MODAL*/
 
-  /**/
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteHorario(value.id_horario)
+      .then(() => {
+        message.success({
+          content: `Horario: ${value.nome_horario} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
+  };
+  /*Pop*/
+
   useEffect(() => {
     if (valueF === "" || reload === true) {
       getHorario().then((data) => {
@@ -40,100 +57,93 @@ function HorariosMain() {
 
   const columns = [
     {
-      title: "Nome do horário",
+      title: "Nome do Horário ",
       dataIndex: "nome_horario",
       key: "nome_horario",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_horario.localeCompare(b.nome_horario),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Início do horário",
+      title: "Hora Inicial",
       dataIndex: "hora_inicio",
       key: "hora_inicio",
+      render: (data) => {
+        console.log(data);
+        return moment(data).format("HH:mm");
+      },
     },
     {
-      title: "Fim do horário",
+      title: "Hora Final",
       dataIndex: "hora_fim",
       key: "hora_fim",
+      render: (data) => {
+        return moment(data).format("HH:mm");
+      },
     },
 
     {
+      title: "Está Ativo",
+      dataIndex: "is_active",
+      key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
+    },
+    {
       title: "Ações",
-      key: "id_disciplina",
+      key: "id_horario",
       render: (record) => (
         <Space size="middle">
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setHorario(record);
               setModalContent(
                 <Modal
-                  title={`Editando a Horario: ${record.nome_horario}`}
+                  title={`Editando o horario: ${record.nome_horario}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateHorario horario={horario} handleOk={handleOk} />
+                  <FormHorario horario={record} handleOk={handleOk} />
                 </Modal>
               );
-
               setVisible(true);
+              setReload(true);
             }}
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletando a horario: ${record.nome_horario}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>
-                    Gostaria mesmo de deletar a horario {record.nome_horario}?
-                  </h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteHorario(record.id_horario).then(() => {
-                        alert(`Deletado o horario: ${record.nome_horario}`);
 
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },
   ];
+
   return (
-    <Card title="Gerenciamento de Horario" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Horários " style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando novo horario:`}
+                title={`Cadastrando novo Horario :`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
@@ -145,20 +155,20 @@ function HorariosMain() {
             setVisible(true);
           }}
         >
-          Cadastrar Horario
+          Cadastrar Horário
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por Horario"
+        placeholder="Pesquisar por Matéria"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_disciplina.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_horario.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -175,18 +185,22 @@ function HorariosMain() {
         dataSource={busca}
         showSorterTooltip={false}
         footer={() => {
-          if (!valueF) {
-            return (
-              <h5>
-                Existem <b>{busca.length}</b> resultados.
-              </h5>
-            );
+          if (busca) {
+            if (!valueF) {
+              return (
+                <h5>
+                  Existem <b>{busca.length}</b> resultados.
+                </h5>
+              );
+            } else {
+              return (
+                <h5>
+                  Existem <b>{busca.length}</b> resultados para {valueF}.
+                </h5>
+              );
+            }
           } else {
-            return (
-              <h5>
-                Existem <b>{busca.length}</b> resultados para {valueF}.
-              </h5>
-            );
+            return <h5>Existe nenhum resultado.</h5>;
           }
         }}
       />

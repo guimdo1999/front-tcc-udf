@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { Alert, Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
+import DeletePop from "../../components/DeletePop";
 
 import { deleteProfessor, getProfessor } from "../../Utils/Professor";
+
 import FormProfessor from "./FormProfessor";
-import UpdateProfessor from "./UpdateProfessor";
 
 function ProfessoresMain() {
   const [busca, setBusca] = useState([]);
-  const [professor, setprofessor] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -24,11 +24,28 @@ function ProfessoresMain() {
   };
 
   const handleCancel = () => {
-    setReload(false);
     setModalContent("");
+    setReload(false);
+  };
+  /*MODAL*/
+
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteProfessor(value.id_professor)
+      .then(() => {
+        message.success({
+          content: `Professor: ${value.nome_professor} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
   };
 
-  /**/
+  /*Pop*/
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
@@ -41,25 +58,14 @@ function ProfessoresMain() {
 
   const columns = [
     {
-      title: "Nome do professor",
+      title: "Nome do Professor",
       dataIndex: "nome_professor",
       key: "nome_professor",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_professor.localeCompare(b.nome_professor),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Mátricula",
-      dataIndex: "matricula",
-      key: "matricula",
-    },
-    {
-      title: "Telefone",
-      dataIndex: "telefone",
-      key: "telefone",
     },
     {
       title: "Horas trabalhadas por semana",
@@ -72,6 +78,22 @@ function ProfessoresMain() {
       key: "email_professor",
     },
     {
+      title: "Está Ativo",
+      dataIndex: "is_active",
+      key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
+    },
+    {
       title: "Ações",
       key: "id_professor",
       render: (record) => (
@@ -79,73 +101,40 @@ function ProfessoresMain() {
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setprofessor(record);
               setModalContent(
                 <Modal
-                  title={`Editando a professor: ${record.nome_professor}`}
+                  title={`Editando o Professor: ${record.nome_professor}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateProfessor professor={professor} handleOk={handleOk} />
+                  <FormProfessor professor={record} handleOk={handleOk} />
                 </Modal>
               );
-
               setVisible(true);
             }}
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletando a professor: ${record.nome_professor}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>
-                    Gostaria mesmo de deletar a professor{" "}
-                    {record.nome_professor}?
-                  </h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteProfessor(record.id_professor).then(() => {
-                        <Alert message="Success Text" type="success" />;
-                        alert(`Deletado o professor: ${record.nome_professor}`);
 
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },
   ];
   return (
-    <Card title="Gerenciamento de Professores" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Professors" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando novo professor:`}
+                title={`Cadastrando novo Professor:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
@@ -164,7 +153,7 @@ function ProfessoresMain() {
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por professor"
+        placeholder="Pesquisar por Professor"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();

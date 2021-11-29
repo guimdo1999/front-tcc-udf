@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import { Button, Card, message, Modal, Row, Space, Table } from "antd";
 import Search from "antd/lib/input/Search";
+import { deleteDia, getDia } from "../../Utils/Dia";
+
+import FormDia from "./FormDia";
 import DeletePop from "../../components/DeletePop";
 
-import { deleteTurma, getTurma } from "../../Utils/Turma";
-
-import FormTurma from "./FormTurma";
-
-import moment from "moment";
-
-function TurmasMain() {
+function DiaMain() {
   const [busca, setBusca] = useState([]);
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
@@ -33,10 +30,10 @@ function TurmasMain() {
 
   /*Pop*/
   const handlePopOk = (value) => {
-    deleteTurma(value.id_turma)
+    deleteDia(value.id_dia)
       .then(() => {
         message.success({
-          content: `Turma: ${value.nome_turma} foi deletado.`,
+          content: `Dia: ${value.nome_dia} foi deletado.`,
           key,
         });
         handleOk();
@@ -51,7 +48,7 @@ function TurmasMain() {
 
   useEffect(() => {
     if (valueF === "" || reload === true) {
-      getTurma().then((data) => {
+      getDia().then((data) => {
         setBusca(data);
         setReload(false);
       });
@@ -60,43 +57,14 @@ function TurmasMain() {
 
   const columns = [
     {
-      title: "Nome da Turma",
-      dataIndex: "nome_turma",
-      key: "nome_turma",
+      title: "Nome do Dia da Semana",
+      dataIndex: "nome_dia",
+      key: "nome_dia",
 
       render: (text) => <p>{text}</p>,
 
-      sorter: (a, b) => a.nome_turma.localeCompare(b.nome_turma),
       defaultSortOrder: "ascend",
       sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Data de Inicio",
-      dataIndex: "data_inicio",
-      key: "data_inicio",
-      render: (data) => {
-        return moment(data).format("DD/MM/YYYY");
-      },
-    },
-    {
-      title: "Data de Fim",
-      dataIndex: "data_fim",
-      key: "data_fim",
-      render: (data) => {
-        return moment(data).format("DD/MM/YYYY");
-      },
-    },
-    {
-      title: "Série",
-      dataIndex: "Series",
-      key: "Series",
-      render: (Series) => {
-        if (Series) {
-          return Series.nome_serie;
-        } else {
-          return null;
-        }
-      },
     },
     {
       title: "Está Ativo",
@@ -116,7 +84,7 @@ function TurmasMain() {
     },
     {
       title: "Ações",
-      key: "id_turma",
+      key: "id_dia",
       render: (record) => (
         <Space size="middle">
           <Button
@@ -124,12 +92,12 @@ function TurmasMain() {
             onClick={() => {
               setModalContent(
                 <Modal
-                  title={`Editando a Turma: ${record.nome_turma}`}
+                  title={`Editando o dia: ${record.nome_dia}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <FormTurma turma={record} handleOk={handleOk} />
+                  <FormDia dia={record} handleOk={handleOk} />
                 </Modal>
               );
               setVisible(true);
@@ -149,39 +117,39 @@ function TurmasMain() {
     },
   ];
   return (
-    <Card title="Gerenciamento de Turmas" style={{ width: "100%" }}>
+    <Card title="Gerenciamento de Dias da Semana" style={{ width: "100%" }}>
       <Row>
         <Button
           type="primary"
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando nova Turma:`}
+                title={`Cadastrando novo Dia da semana:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormTurma handleOk={handleOk} />
+                <FormDia handleOk={handleOk} />
               </Modal>
             );
 
             setVisible(true);
           }}
         >
-          Cadastrar Turma
+          Cadastrar Dia da Semana
         </Button>
       </Row>
       <br></br>
       <br></br>
       {modalContent}
       <Search
-        placeholder="Pesquisar por Turma"
+        placeholder="Pesquisar por Dia"
         allowClear
         onChange={(e) => {
           const valorAtual = e.target.value.toLocaleLowerCase();
           setValueF(valorAtual);
           const filteredData = busca.filter((entry) =>
-            entry.nome_turma.toLocaleLowerCase().includes(valorAtual)
+            entry.nome_dia.toLocaleLowerCase().includes(valorAtual)
           );
           setBusca(filteredData);
         }}
@@ -213,7 +181,7 @@ function TurmasMain() {
               );
             }
           } else {
-            return <h5>Não existem resultados.</h5>;
+            return <h5>Existe nenhum resultado.</h5>;
           }
         }}
       />
@@ -221,4 +189,4 @@ function TurmasMain() {
   );
 }
 
-export default TurmasMain;
+export default DiaMain;

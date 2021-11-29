@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
+
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
+import Search from "antd/lib/input/Search";
+import DeletePop from "../../components/DeletePop";
+
 import { deleteAluno, getAluno } from "../../Utils/Aluno";
 
-import { Button, Card, Modal, Row, Space, Table } from "antd";
-import Search from "antd/lib/input/Search";
-
-import UpdateAluno from "./UpdateAluno";
 import FormAluno from "./FormAluno";
+
+import moment from "moment";
 
 function AlunosMain() {
   const [busca, setBusca] = useState([]);
-  const [aluno, setAluno] = useState([]);
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
 
   const handleOk = () => {
@@ -27,8 +29,26 @@ function AlunosMain() {
     setModalContent("");
     setReload(false);
   };
+  /*MODAL*/
 
-  /**/
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteAluno(value.id_aluno)
+      .then(() => {
+        message.success({
+          content: `Aluno: ${value.nome_aluno} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
+  };
+
+  /*Pop*/
+
   useEffect(() => {
     if (valueF === "" || reload === true) {
       getAluno().then((data) => {
@@ -36,7 +56,7 @@ function AlunosMain() {
         setReload(false);
       });
     }
-  }, [valueF, reload]);
+  }, [valueF || reload]);
 
   const columns = [
     {
@@ -51,40 +71,54 @@ function AlunosMain() {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Data de nascimento",
+      title: "Data de Nascimento",
       dataIndex: "data_nascimento",
       key: "data_nascimento",
+      render: (data) => {
+        return moment(data).format("DD/MM/YYYY");
+      },
     },
     {
       title: "Sexo",
-      dataIndex: "sexo",
-      key: "address",
+      dataIndex: "cod_sexo",
+      key: "cod_sexo",
+      filters: [
+        {
+          text: "Masculino",
+          value: "M",
+        },
+        {
+          text: "Feminino",
+          value: "F",
+        },
+      ],
+      onFilter: (value, record) => record.cod_sexo.indexOf(value) === 0,
     },
     {
-      title: "Matricula",
+      title: "Mátricula",
       dataIndex: "matricula",
-      key: "address",
-      sorter: (a, b) => a.matricula.localeCompare(b.matricula),
-
-      sortDirections: ["ascend", "descend"],
-    },
-    {
-      title: "Ativo",
-      dataIndex: "is_active",
-      key: "is_active",
-      sorter: (a, b) => a.matricula.localeCompare(b.matricula),
-
-      sortDirections: ["ascend", "descend"],
-    },
-    {
-      title: "Telefone",
-      dataIndex: "telefone",
-      key: "address",
+      key: "matricula",
     },
     {
       title: "Email",
-      dataIndex: "email",
-      key: "address",
+      dataIndex: "email_aluno",
+      key: "email_aluno",
+    },
+    {
+      title: "Está Ativo",
+      dataIndex: "is_active",
+      key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
     },
     {
       title: "Ações",
@@ -94,70 +128,32 @@ function AlunosMain() {
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setAluno(record);
               setModalContent(
                 <Modal
-                  title={`Editando o aluno: ${record.nome_aluno}`}
+                  title={`Editando o Aluno: ${record.nome_aluno}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateAluno aluno={aluno} handleOk={handleOk} />
+                  <FormAluno aluno={record} handleOk={handleOk} />
                 </Modal>
               );
-
               setVisible(true);
+              setReload(true);
             }}
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletando o aluno: ${record.nome_aluno}`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>
-                    Gostaria mesmo de deletar o aluno {record.nome_aluno}?
-                  </h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteAluno(record.id_aluno).then(() => {
-                        alert(`Deletado o aluno: ${record.nome_aluno}`);
 
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },
   ];
-
-  /* function onChange(value) {
-    console.log(value);
-    getAlunoId(value).then((data) => {
-      setAluno(data);
-    });
-  } */
-
   return (
     <Card title="Gerenciamento de Alunos" style={{ width: "100%" }}>
       <Row>
@@ -166,7 +162,7 @@ function AlunosMain() {
           onClick={() => {
             setModalContent(
               <Modal
-                title={`Cadastrando novo aluno:`}
+                title={`Cadastrando novo Aluno:`}
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}
@@ -208,18 +204,22 @@ function AlunosMain() {
         dataSource={busca}
         showSorterTooltip={false}
         footer={() => {
-          if (!valueF) {
-            return (
-              <h5>
-                Existem <b>{busca.length}</b> resultados.
-              </h5>
-            );
+          if (busca) {
+            if (!valueF) {
+              return (
+                <h5>
+                  Existem <b>{busca.length}</b> resultados.
+                </h5>
+              );
+            } else {
+              return (
+                <h5>
+                  Existem <b>{busca.length}</b> resultados para {valueF}.
+                </h5>
+              );
+            }
           } else {
-            return (
-              <h5>
-                Existem <b>{busca.length}</b> resultados para {valueF}.
-              </h5>
-            );
+            return <h5>Não existem resultados.</h5>;
           }
         }}
       />

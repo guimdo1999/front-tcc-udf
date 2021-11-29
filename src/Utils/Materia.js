@@ -1,47 +1,50 @@
 import * as backEndUtils from "./BackEnd";
 
-export const insertTurno = async (dados) => {
-  const registrar_turno = {
-    nome_turno: dados.nome_turno,
+export const insertMateria = async (dados) => {
+  const registrar_materia = {
+    nome_materia: dados.nome_materia,
     is_active: dados.is_active,
+    fk_disciplina: dados.fk_disciplina,
+    fk_serie: dados.fk_serie,
   };
   return await backEndUtils
-    .chamarBackEnd("POST", "/api/turno", registrar_turno)
+    .chamarBackEnd("POST", "/api/materia", registrar_materia)
     .then((resposta) => {
       return resposta.json().then((data) => data);
     });
 };
 
-export const getTurno = async () => {
+export const getMateria = async () => {
   return await backEndUtils
-    .chamarBackEnd("GET", "/api/turno")
-    .then((resposta) => {
-      return resposta.json().then((data) => data.data);
-    });
-};
-export const getTurnoId = async (req) => {
-  return await backEndUtils
-    .chamarBackEnd("GET", "/api/turno/" + req)
+    .chamarBackEnd("GET", "/api/materia")
     .then((resposta) => {
       return resposta.json().then((data) => data.data);
     });
 };
 
-export const putTurnoId = async (id, dados) => {
-  const update_turno = {
-    nome_turno: dados.nome_turno,
+export const getMateriaId = async (req) => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/materia/" + req)
+    .then((resposta) => {
+      return resposta.json().then((data) => data.data);
+    });
+};
+
+export const putMateriaId = async (id, dados) => {
+  const update_materia = {
+    nome_materia: dados.nome_materia,
     is_active: dados.is_active,
   };
   return await backEndUtils
-    .chamarBackEnd("PUT", "/api/turno/" + id, update_turno)
+    .chamarBackEnd("PUT", "/api/materia/" + id, update_materia)
     .then((resposta) => {
       return resposta.json().then((data) => data);
     });
 };
 
-export const deleteTurno = async (id) => {
+export const deleteMateria = async (id) => {
   return await backEndUtils
-    .chamarBackEnd("DELETE", "/api/turno/" + id)
+    .chamarBackEnd("DELETE", "/api/materia/" + id)
     .then((resposta) => {
       return resposta.json().then((data) => data.data);
     });

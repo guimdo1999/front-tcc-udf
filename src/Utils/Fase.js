@@ -1,47 +1,48 @@
 import * as backEndUtils from "./BackEnd";
 
-export const insertTurno = async (dados) => {
-  const registrar_turno = {
-    nome_turno: dados.nome_turno,
+export const insertFase = async (dados) => {
+  const registrar_fase = {
+    nome_fase: dados.nome_fase,
     is_active: dados.is_active,
   };
   return await backEndUtils
-    .chamarBackEnd("POST", "/api/turno", registrar_turno)
+    .chamarBackEnd("POST", "/api/fase", registrar_fase)
     .then((resposta) => {
       return resposta.json().then((data) => data);
     });
 };
 
-export const getTurno = async () => {
+export const getFase = async () => {
   return await backEndUtils
-    .chamarBackEnd("GET", "/api/turno")
-    .then((resposta) => {
-      return resposta.json().then((data) => data.data);
-    });
-};
-export const getTurnoId = async (req) => {
-  return await backEndUtils
-    .chamarBackEnd("GET", "/api/turno/" + req)
+    .chamarBackEnd("GET", "/api/fase")
     .then((resposta) => {
       return resposta.json().then((data) => data.data);
     });
 };
 
-export const putTurnoId = async (id, dados) => {
-  const update_turno = {
-    nome_turno: dados.nome_turno,
+export const getFaseId = async (req) => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/fase/" + req)
+    .then((resposta) => {
+      return resposta.json().then((data) => data.data);
+    });
+};
+
+export const putFaseId = async (id, dados) => {
+  const update_fase = {
+    nome_fase: dados.nome_fase,
     is_active: dados.is_active,
   };
   return await backEndUtils
-    .chamarBackEnd("PUT", "/api/turno/" + id, update_turno)
+    .chamarBackEnd("PUT", "/api/fase/" + id, update_fase)
     .then((resposta) => {
       return resposta.json().then((data) => data);
     });
 };
 
-export const deleteTurno = async (id) => {
+export const deleteFase = async (id) => {
   return await backEndUtils
-    .chamarBackEnd("DELETE", "/api/turno/" + id)
+    .chamarBackEnd("DELETE", "/api/fase/" + id)
     .then((resposta) => {
       return resposta.json().then((data) => data.data);
     });

@@ -1,103 +1,134 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, InputNumber, Button, Select } from "antd";
-import { insertTurma } from "../../Utils/Turma";
-import { getTurno } from "../../Utils/Turno";
-import { getTipo_ensino } from "../../Utils/TipoEnsino";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  message,
+  DatePicker,
+  InputNumber,
+} from "antd";
+import { insertTurma, putTurmaId } from "../../Utils/Turma";
+import { getSerie } from "../../Utils/Serie";
 
-function FormTurma({ handleOk }) {
+import moment from "moment";
+
+function FormTurma({ handleOk, turma }) {
   const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 9 },
+    labelCol: { span: 9 },
+    wrapperCol: { span: 12 },
   };
 
-  const [turno, setTurno] = useState([]);
-  const [tipoEnsino, setTipoEnsino] = useState([]);
-  useEffect(() => {
-    getTurno().then((data) => {
-      setTurno(data);
-    });
-    getTipo_ensino().then((data) => {
-      setTipoEnsino(data);
-    });
-  }, []);
+  const [serie, setSerie] = useState([]);
 
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
     required: "${label} precisa ser preenchido!",
-    types: {
-      email: "${label} não é um e-mail válido!",
-      number: "${label} não é um número válido!",
-    },
   };
+
+  const key = "updatable";
   const onFinish = (values) => {
-    insertTurma(values).then(() => {
-      alert(`Cadastrado o tipo de ensino: ${values.nome_turma}`);
-      handleOk();
-    });
+    if (!turma) {
+      message.loading({ content: `Criando Turma: ${values.nome_turma}.`, key });
+      insertTurma(values)
+        .then((resposta) => {
+          message.success({ content: resposta.message, key, duration: 2 });
+          handleOk();
+        })
+        .catch(() => {
+          message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        });
+    } else {
+      message.loading({
+        content: `Editando o Turma: ${values.nome_turma}.`,
+        key,
+      });
+      putTurmaId(turma.id_turma, values)
+        .then((resposta) => {
+          message.success({ content: resposta.message, key, duration: 2 });
+          handleOk();
+        })
+        .catch(() => {
+          message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        });
+    }
   };
+
+  const format = "DD/MM/YYYY";
+
+  if (turma) {
+    var data_inicio = moment(turma.data_inicio, format);
+    var data_fim = moment(turma.data_fim, format);
+  } else {
+    var data_inicio = "";
+    var data_fim = "";
+  }
+
+  useEffect(() => {
+    getSerie().then((data) => {
+      setSerie(data);
+    });
+  }, []);
+
   return (
     <Form
       {...layout}
       name="nest-messages"
       onFinish={onFinish}
       validateMessages={validateMessages}
+      initialValues={{
+        nome_turma: turma?.nome_turma,
+        data_inicio: data_inicio,
+        data_fim: data_fim,
+        fk_serie: turma?.fk_serie,
+        is_active: turma?.is_active,
+      }}
     >
       <Form.Item
         name={"nome_turma"}
         label="Nome Turma"
         rules={[{ required: true }]}
       >
-        <Input placeholder="Ex: 1a, Primeiro Ano" />
+        <Input placeholder="EX: 1ºTurma / Primeiro turma / Turma Um" />
       </Form.Item>
 
-      <Form.Item name={"id_turno"} label="Turno:" rules={[{ required: true }]}>
-        <Select style={{ width: "100%" }} placeholder="Selecione um Turno">
-          {turno.map((item) => {
+      <Form.Item
+        name={"data_inicio"}
+        label="Data de Inicio"
+        rules={[{ required: true }]}
+      >
+        <DatePicker format={format} />
+      </Form.Item>
+
+      <Form.Item
+        name={"data_fim"}
+        label="Data de fim"
+        rules={[{ required: true }]}
+      >
+        <DatePicker format={format} />
+      </Form.Item>
+
+      <Form.Item name={"fk_serie"} label="Série" rules={[{ required: true }]}>
+        <Select style={{ width: "100%" }} placeholder="Selecione uma Série">
+          {serie.map((item) => {
             return (
-              <Select.Option value={item.id_turno}>
-                {item.nome_turno}
+              <Select.Option value={item.id_serie}>
+                {item.nome_serie}
               </Select.Option>
             );
           })}
         </Select>
       </Form.Item>
+
       <Form.Item
-        name={"id_tipo_ensino"}
-        label="Tipo de Ensino:"
+        label="Está ativo"
+        name={"is_active"}
         rules={[{ required: true }]}
       >
-        <Select style={{ width: "100%" }} placeholder="Selecione um Tipo">
-          {tipoEnsino.map((item) => {
-            return (
-              <Select.Option value={item.id_tipo_ensino}>
-                {item.nome_tipo_ensino}
-              </Select.Option>
-            );
-          })}
+        <Select style={{ width: "100%" }} placeholder="Está ativo">
+          <Select.Option value="Sim">Sim</Select.Option>
+          <Select.Option value="Não">Não</Select.Option>
         </Select>
-      </Form.Item>
-
-      <Form.Item
-        name={"ano_turma"}
-        label="Ano da Turma"
-        rules={[{ type: "number", required: true }]}
-      >
-        <InputNumber style={{ width: "50%" }} />
-      </Form.Item>
-
-      <Form.Item
-        name={"qtd_meses"}
-        label="Quantia Meses"
-        rules={[{ type: "number", required: true }]}
-      >
-        <InputNumber style={{ width: "50%" }} placeholder="6" />
-      </Form.Item>
-      <Form.Item
-        name={"tipo_de_calendario"}
-        label="Calendário"
-        rules={[{ required: true }]}
-      >
-        <Input style={{ width: "75%" }} placeholder="???" />
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 18 }}>

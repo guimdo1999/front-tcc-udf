@@ -43,9 +43,13 @@ function ManagerMenu() {
           case "Admin":
             history.push("/main/home");
             break;
+          default:
+            console.log("");
+            break;
         }
       })
       .catch((err) => {
+        console.log(err);
         history.push("/");
       });
   }, []);

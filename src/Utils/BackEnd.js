@@ -18,6 +18,7 @@ export const chamarBackEnd = async (metodo, caminho, corpo) => {
       method: metodo,
       credentials: "include",
       headers: {
+        dataType: "text",
         "Content-Type": "application/json",
       },
     });

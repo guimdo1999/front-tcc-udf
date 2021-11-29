@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Card, Modal, Row, Space, Table } from "antd";
+import { Button, Card, message, Modal, Row, Space, Table } from "antd";
+import Search from "antd/lib/input/Search";
+import { deleteAula, getAula } from "../../Utils/Aula";
 
-import { getTurma } from "../../Utils/Turma";
-import { getProfessor } from "../../Utils/Professor";
-import { deleteAula, getAulas } from "../../Utils/Aulas";
-import { getDisciplina } from "../../Utils/Disciplina";
-import FormAulas from "./FormAulas";
-import UpdateAulas from "./UpdateAulas";
+import FormAula from "./FormAula";
+import DeletePop from "../../components/DeletePop";
 
 function AulasMain() {
   const [busca, setBusca] = useState([]);
-  const [professor, setProfessor] = useState();
-  const [disciplina, setDisciplina] = useState();
-  const [turma, setTurma] = useState();
-
-  const [aula, setAula] = useState();
-
-  //const [valueF, setValueF] = useState("");
-  const [reload, setReload] = useState(true);
+  const [valueF, setValueF] = useState("");
+  const [reload, setReload] = useState(false);
+  const key = "updatable";
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
@@ -30,81 +23,88 @@ function AulasMain() {
   };
 
   const handleCancel = () => {
-    setReload(false);
     setModalContent("");
+    setReload(false);
   };
-  /**/
+  /*MODAL*/
+
+  /*Pop*/
+  const handlePopOk = (value) => {
+    deleteAula(value.id_aula)
+      .then(() => {
+        message.success({
+          content: `Aula: ${value.nome_aula} foi deletado.`,
+          key,
+        });
+        handleOk();
+      })
+      .catch(() => {
+        message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        handleCancel();
+      });
+  };
+
+  /*Pop*/
 
   useEffect(() => {
-    if (reload === true) {
-      getAulas().then((data) => {
+    if (valueF === "" || reload === true) {
+      getAula().then((data) => {
         setBusca(data);
+        setReload(false);
       });
-      getDisciplina().then((data) => {
-        setDisciplina(data);
-      });
-      getProfessor().then((data) => {
-        setProfessor(data);
-      });
-      getTurma().then((data) => {
-        setTurma(data);
-      });
-      setReload(false);
     }
-  }, [reload]);
+  }, [valueF || reload]);
 
   const columns = [
     {
-      title: "Nome do Professor",
-      dataIndex: "id_professor",
-      key: "id_professor",
+      title: "Nome da Aula",
+      dataIndex: "nome_aula",
+      key: "nome_aula",
 
-      render: (id) => {
+      render: (text) => <p>{text}</p>,
+
+      defaultSortOrder: "ascend",
+      sortDirections: ["descend", "ascend"],
+    },
+    {
+      title: "Professor",
+      dataIndex: "Professor",
+      key: "Professor",
+      render: (professor) => {
         if (professor) {
-          const found = professor.find((obj) => obj.id_professor === id);
-          return found.nome_professor;
+          return professor.nome_professor;
+        } else {
+          return null;
         }
       },
     },
     {
-      title: "Nome Disciplina",
-      dataIndex: "id_disciplina",
-      key: "id_disciplina",
-
-      render: (id) => {
-        if (disciplina) {
-          const found = disciplina.find((obj) => obj.id_disciplina === id);
-          return found.nome_disciplina;
+      title: "Matéria",
+      dataIndex: "Materium",
+      key: "Materium",
+      render: (materia) => {
+        if (materia) {
+          return materia.nome_materia;
+        } else {
+          return null;
         }
       },
     },
     {
-      title: "Nome Turma",
-      dataIndex: "id_turma",
-      key: "id_turma",
-
-      render: (id) => {
-        if (turma) {
-          const found = turma.find((obj) => obj.id_turma === id);
-          return found.nome_turma;
-        }
-      },
-    },
-    {
-      title: "Quantia de Aulas Semanais",
-      dataIndex: "qtd_aula_semana",
-      key: "qtd_aula_semana",
-    },
-
-    {
-      title: "Aulas começam/começarão",
-      dataIndex: "data_inicio_aula",
-      key: "data_inicio_aula",
-    },
-    {
-      title: "Aulas terminam/terminarão",
-      dataIndex: "data_fim_aula",
-      key: "data_fim_aula",
+      title: "Está Ativo",
+      dataIndex: "is_active",
+      key: "is_active",
+      filters: [
+        {
+          text: "Sim",
+          value: "Sim",
+        },
+        {
+          text: "Não",
+          value: "Não",
+        },
+      ],
+      onFilter: (value, record) => record.is_active.indexOf(value) === 0,
     },
     {
       title: "Ações",
@@ -114,56 +114,28 @@ function AulasMain() {
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setAula(record);
               setModalContent(
                 <Modal
-                  title={`Editando a Aula`}
+                  title={`Editando a aula: ${record.nome_aula}`}
                   visible={visible}
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateAulas aula={aula} handleOk={handleOk} />
+                  <FormAula aula={record} handleOk={handleOk} />
                 </Modal>
               );
-
               setVisible(true);
+              setReload(true);
             }}
           >
             Editar
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalContent(
-                <Modal
-                  title={`Deletanda a aula`}
-                  visible={visible}
-                  onCancel={handleCancel}
-                  footer={null}
-                >
-                  <h3>Gostaria mesmo de deletar essa aula??</h3>
-                  <Button
-                    type="primary"
-                    danger
-                    onClick={() => {
-                      deleteAula(record.id_aula).then(() => {
-                        alert(`Deletado a Aula selecionada`);
 
-                        handleOk();
-                      });
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </Modal>
-              );
-              setVisible(true);
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk(record);
             }}
-          >
-            Deletar
-          </Button>
+          />
         </Space>
       ),
     },
@@ -181,7 +153,7 @@ function AulasMain() {
                 onCancel={handleCancel}
                 footer={null}
               >
-                <FormAulas handleOk={handleOk} />
+                <FormAula handleOk={handleOk} />
               </Modal>
             );
 
@@ -194,6 +166,23 @@ function AulasMain() {
       <br></br>
       <br></br>
       {modalContent}
+      <Search
+        placeholder="Pesquisar por Aula"
+        allowClear
+        onChange={(e) => {
+          const valorAtual = e.target.value.toLocaleLowerCase();
+          setValueF(valorAtual);
+          const filteredData = busca.filter((entry) =>
+            entry.nome_aula.toLocaleLowerCase().includes(valorAtual)
+          );
+          setBusca(filteredData);
+        }}
+        style={{
+          width: "45%",
+          float: "right",
+          margin: "5px",
+        }}
+      />
 
       <Table
         columns={columns}
@@ -201,14 +190,18 @@ function AulasMain() {
         dataSource={busca}
         showSorterTooltip={false}
         footer={() => {
-          if (busca) {
+          if (!valueF) {
             return (
               <h5>
                 Existem <b>{busca.length}</b> resultados.
               </h5>
             );
           } else {
-            return <h5>Não existem resultados.</h5>;
+            return (
+              <h5>
+                Existem <b>{busca.length}</b> resultados para {valueF}.
+              </h5>
+            );
           }
         }}
       />
