@@ -64,12 +64,15 @@ function FormHorario({ handleOk, horario }) {
 
   const format = "HH:mm";
 
+  var hora_inicio;
+  var hora_fim;
+
   if (horario) {
-    var hora_inicio = moment(horario.hora_inicio, format);
-    var hora_fim = moment(horario.hora_fim, format);
+    hora_inicio = moment(horario.hora_inicio);
+    hora_fim = moment(horario.hora_fim);
   } else {
-    var hora_inicio = "";
-    var hora_fim = "";
+    hora_inicio = "";
+    hora_fim = "";
   }
 
   return (
@@ -134,6 +137,7 @@ function FormHorario({ handleOk, horario }) {
         rules={[{ required: true }]}
       >
         <TimePicker format={format} placeholder="08:25" />
+        {/*<TimePicker.RangePicker format={format} />*/}
       </Form.Item>
 
       <Form.Item

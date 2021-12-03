@@ -6,8 +6,6 @@ import { deleteSerie, getSerie } from "../../Utils/Serie";
 
 import FormSerie from "./FormSerie";
 import DeletePop from "../../components/DeletePop";
-import { getFase, getFaseId } from "../../Utils/Fase";
-import { getAno } from "../../Utils/Ano";
 
 function SerieMain() {
   const [busca, setBusca] = useState([]);
@@ -55,7 +53,7 @@ function SerieMain() {
       });
     }
     setReload(false);
-  }, [valueF || reload]);
+  }, [valueF, reload]);
 
   const columns = [
     {

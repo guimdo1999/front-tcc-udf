@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Select,
-  message,
-  DatePicker,
-  InputNumber,
-} from "antd";
+import { Form, Input, Button, Select, message, DatePicker } from "antd";
 import { insertTurma, putTurmaId } from "../../Utils/Turma";
 import { getSerie } from "../../Utils/Serie";
 
@@ -55,13 +47,15 @@ function FormTurma({ handleOk, turma }) {
   };
 
   const format = "DD/MM/YYYY";
+  var data_inicio;
+  var data_fim;
 
   if (turma) {
-    var data_inicio = moment(turma.data_inicio, format);
-    var data_fim = moment(turma.data_fim, format);
+    data_inicio = moment(turma.data_inicio, format);
+    data_fim = moment(turma.data_fim, format);
   } else {
-    var data_inicio = "";
-    var data_fim = "";
+    data_inicio = "";
+    data_fim = "";
   }
 
   useEffect(() => {

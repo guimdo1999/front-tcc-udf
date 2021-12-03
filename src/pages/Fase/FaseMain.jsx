@@ -53,7 +53,7 @@ function FaseMain() {
         setReload(false);
       });
     }
-  }, [valueF || reload]);
+  }, [valueF, reload]);
 
   const columns = [
     {

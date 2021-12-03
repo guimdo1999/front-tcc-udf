@@ -53,7 +53,9 @@ function HorariosMain() {
         setReload(false);
       });
     }
-  }, [valueF || reload]);
+  }, [valueF, reload]);
+
+  const format = "HH:mm";
 
   const columns = [
     {
@@ -67,12 +69,35 @@ function HorariosMain() {
       sortDirections: ["descend", "ascend"],
     },
     {
+      title: "Turno",
+      dataIndex: "Turno",
+      key: "Turno",
+      render: (turno) => {
+        if (turno) {
+          return turno.nome_turno;
+        } else {
+          return null;
+        }
+      },
+    },
+    {
+      title: "Dia",
+      dataIndex: "Dias",
+      key: "Dias",
+      render: (dia) => {
+        if (dia) {
+          return dia.nome_dia;
+        } else {
+          return null;
+        }
+      },
+    },
+    {
       title: "Hora Inicial",
       dataIndex: "hora_inicio",
       key: "hora_inicio",
       render: (data) => {
-        console.log(data);
-        return moment(data).format("HH:mm");
+        return moment(data).format(format);
       },
     },
     {
@@ -80,7 +105,7 @@ function HorariosMain() {
       dataIndex: "hora_fim",
       key: "hora_fim",
       render: (data) => {
-        return moment(data).format("HH:mm");
+        return moment(data).format(format);
       },
     },
 

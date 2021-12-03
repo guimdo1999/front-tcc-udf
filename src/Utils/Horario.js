@@ -7,7 +7,7 @@ export const insertHorario = async (dados) => {
     hora_fim: dados.hora_fim,
     is_active: dados.is_active,
     fk_dia: dados.fk_dia,
-    fk_turno: dados.turno,
+    fk_turno: dados.fk_turno,
   };
   return await backEndUtils
     .chamarBackEnd("POST", "/api/horario", registrar_horario)
@@ -31,7 +31,7 @@ export const putHorarioId = async (id, dados) => {
     hora_fim: dados.hora_fim,
     is_active: dados.is_active,
     fk_dia: dados.fk_dia,
-    fk_turno: dados.turno,
+    fk_turno: dados.fk_turno,
   };
   return await backEndUtils
     .chamarBackEnd("PUT", "/api/horario/" + id, update_horario)

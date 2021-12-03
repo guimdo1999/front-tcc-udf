@@ -28,6 +28,7 @@ function FormAula({ handleOk, aula }) {
   }, []);
 
   const key = "updatable";
+
   const onFinish = (values) => {
     if (!aula) {
       message.loading({
@@ -44,7 +45,7 @@ function FormAula({ handleOk, aula }) {
         });
     } else {
       message.loading({
-        content: `Editando o Aula: ${values.nome_aula}.`,
+        content: `Editando a Aula: ${values.nome_aula}.`,
         key,
       });
       putAulaId(aula.id_aula, values)

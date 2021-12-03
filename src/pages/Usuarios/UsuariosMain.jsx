@@ -8,7 +8,6 @@ import UpdateUsuario from "./UpdateUsuario";
 
 function UsuariosMain() {
   const [busca, setBusca] = useState([]);
-  const [usuario, setUsuario] = useState();
   const [valueF, setValueF] = useState("");
   const [reload, setReload] = useState(false);
   const [nomeUser, setNomeUser] = useState("");
@@ -68,8 +67,6 @@ function UsuariosMain() {
           <Button
             type="primary"
             onClick={() => {
-              //console.log(record);
-              setUsuario(record);
               setModalContent(
                 <Modal
                   title={`Editando o usuario: ${record.cod_login}`}
@@ -77,7 +74,7 @@ function UsuariosMain() {
                   onCancel={handleCancel}
                   footer={null}
                 >
-                  <UpdateUsuario usuario={usuario} handleOk={handleOk} />
+                  <UpdateUsuario usuario={record} handleOk={handleOk} />
                 </Modal>
               );
 

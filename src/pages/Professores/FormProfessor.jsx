@@ -33,7 +33,7 @@ function FormProfessor({ handleOk, professor }) {
         content: `Editando o Professor: ${values.nome_professor}.`,
         key,
       });
-      console.log(professor.id_professor);
+
       putProfessorId(professor.id_professor, values)
         .then((resposta) => {
           message.success({ content: resposta.message, key, duration: 2 });

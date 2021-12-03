@@ -1,4 +1,4 @@
-import { Button, message, Popconfirm } from "antd";
+import { Button, Popconfirm } from "antd";
 import React, { useState } from "react";
 
 function DeletePop({ deleteFunction }) {

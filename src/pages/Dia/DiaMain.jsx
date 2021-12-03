@@ -53,7 +53,7 @@ function DiaMain() {
         setReload(false);
       });
     }
-  }, [valueF || reload]);
+  }, [valueF, reload]);
 
   const columns = [
     {

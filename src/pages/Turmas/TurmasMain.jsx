@@ -56,7 +56,7 @@ function TurmasMain() {
         setReload(false);
       });
     }
-  }, [valueF || reload]);
+  }, [valueF, reload]);
 
   const columns = [
     {

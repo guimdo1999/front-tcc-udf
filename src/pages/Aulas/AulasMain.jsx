@@ -53,7 +53,7 @@ function AulasMain() {
         setReload(false);
       });
     }
-  }, [valueF || reload]);
+  }, [valueF, reload]);
 
   const columns = [
     {
@@ -68,8 +68,8 @@ function AulasMain() {
     },
     {
       title: "Professor",
-      dataIndex: "Professor",
-      key: "Professor",
+      dataIndex: "Professores",
+      key: "Professores",
       render: (professor) => {
         if (professor) {
           return professor.nome_professor;
@@ -80,8 +80,8 @@ function AulasMain() {
     },
     {
       title: "Matéria",
-      dataIndex: "Materium",
-      key: "Materium",
+      dataIndex: "Materias",
+      key: "Materias",
       render: (materia) => {
         if (materia) {
           return materia.nome_materia;

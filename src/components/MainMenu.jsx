@@ -6,7 +6,7 @@ import { BrowserRouter as Route } from "react-router-dom";
 
 import { Avatar, Button, Layout, Menu } from "antd";
 import {
-  UploadOutlined,
+  SmileOutlined,
   UserOutlined,
   VideoCameraOutlined,
   BorderlessTableOutlined,
@@ -15,7 +15,16 @@ import {
   UserSwitchOutlined,
   FormOutlined,
   BellOutlined,
+  CalendarOutlined,
+  LogoutOutlined,
+  ContactsOutlined,
+  HourglassOutlined,
+  CalculatorOutlined,
+  SolutionOutlined,
+  ScheduleOutlined,
+  ReadOutlined,
 } from "@ant-design/icons";
+
 import SubMenu from "antd/lib/menu/SubMenu";
 import { getMe, logout } from "../Utils/Login";
 import { cookies } from "../pages/Login/Login";
@@ -26,10 +35,7 @@ import ProfessoresMain from "../pages/Professores/ProfessoresMain";
 import TurmasMain from "../pages/Turmas/TurmasMain";
 import HorariosMain from "../pages/Horarios/HorariosMain";
 import Home from "../pages/Home";
-
 import UsuariosMain from "../pages/Usuarios/UsuariosMain";
-import LecionaMain from "../pages/Leciona/LecionaMain";
-import Page404 from "../pages/Page404";
 import TurnoMain from "../pages/Turno/TurnoMain";
 import AulasMain from "../pages/Aulas/AulasMain";
 import AnoMain from "../pages/Ano/AnoMain";
@@ -38,8 +44,11 @@ import FaseMain from "../pages/Fase/FaseMain";
 import SerieMain from "../pages/Serie/SerieMain";
 import MateriaMain from "../pages/Materia/MateiraMain";
 import MatriculaMain from "../pages/Matricular/MatriculaMain";
+import Page404 from "../pages/Page404";
 
 const { Header, Content, Footer, Sider } = Layout;
+
+const rootSubmenuKeys = ["subLeciona", "subTurmas", "subGrade"];
 
 function MainMenu() {
   const [nomeUsuario, setNomeUsuario] = useState("");
@@ -64,7 +73,7 @@ function MainMenu() {
         console.log(err);
         history.push("/");
       });
-  }, []);
+  }, [history]);
 
   const Logout = () => {
     logout().then(() => {
@@ -76,6 +85,17 @@ function MainMenu() {
   const haveToken = () => {
     if (!cookies.get("auth_token")) {
       history.push("/");
+    }
+  };
+
+  const [openKeys, setOpenKeys] = useState([]);
+
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
 
@@ -100,35 +120,54 @@ function MainMenu() {
         >
           <Avatar size={32}>{nomeUsuario}</Avatar>
         </Header>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["0"]}>
+        <Menu
+          theme="dark"
+          mode="inline"
+          openKeys={openKeys}
+          onOpenChange={onOpenChange}
+          defaultSelectedKeys={["0"]}
+        >
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
           <Menu.Item key="home" icon={<BorderlessTableOutlined />}>
             <Link to={`/main/home`} />
             Home
           </Menu.Item>
 
-          <SubMenu key="subLeciona" title="Ensino" icon={<FormOutlined />}>
+          <SubMenu key="subLeciona" title="Lecionar" icon={<FormOutlined />}>
             <Menu.Item key="disciplinas" icon={<VideoCameraOutlined />}>
               <Link to={`/main/disciplinas`} />
               Disciplinas
             </Menu.Item>
-            <Menu.Item key="professores" icon={<UploadOutlined />}>
+            <Menu.Item
+              key="materia"
+              icon={<CalculatorOutlined />}
+              href="/alunos"
+            >
+              <Link to={`/main/materia`} />
+              Matéria
+            </Menu.Item>
+            <Menu.Item key="professores" icon={<SmileOutlined />}>
               <Link to={`/main/professores`} />
               Professores
             </Menu.Item>
-            <Menu.Item key="leciona" icon={<BellOutlined />}>
-              <Link to={`/main/leciona`} />
-              Leciona
-            </Menu.Item>
-            <Menu.Item key="aulas" icon={<UserSwitchOutlined />}>
+
+            <Menu.Item key="aulas" icon={<BellOutlined />}>
               <Link to={`/main/aulas`} />
               Aulas
             </Menu.Item>
           </SubMenu>
-          <SubMenu key="subTurmas" title="Turmas" icon={<FormOutlined />}>
-            <Menu.Item key="turnos" icon={<TeamOutlined />}>
-              <Link to={`/main/turnos`} />
-              Turnos
+          <SubMenu key="subTurmas" title="Turmas" icon={<ReadOutlined />}>
+            <Menu.Item key="serie" icon={<ContactsOutlined />}>
+              <Link to={`/main/serie`} />
+              Série
+            </Menu.Item>
+            <Menu.Item key="ano" icon={<CalendarOutlined />}>
+              <Link to={`/main/ano`} />
+              Ano
+            </Menu.Item>
+            <Menu.Item key="fase" icon={<FieldTimeOutlined />}>
+              <Link to={`/main/fase`} />
+              Fase
             </Menu.Item>
             <Menu.Item key="turmas" icon={<TeamOutlined />}>
               <Link to={`/main/turmas`} />
@@ -138,36 +177,25 @@ function MainMenu() {
               <Link to={`/main/alunos`} />
               Alunos
             </Menu.Item>
-            <Menu.Item key="serie" icon={<UserOutlined />}>
-              <Link to={`/main/serie`} />
-              Serie
+            <Menu.Item key="matricula" icon={<SolutionOutlined />}>
+              <Link to={`/main/matricula`} />
+              Matricular
             </Menu.Item>
           </SubMenu>
-
-          <Menu.Item key="materia" icon={<UserOutlined />} href="/alunos">
-            <Link to={`/main/materia`} />
-            Matéria
-          </Menu.Item>
-          <Menu.Item key="horarios" icon={<FieldTimeOutlined />}>
-            <Link to={`/main/horarios`} />
-            Horários
-          </Menu.Item>
-          <Menu.Item key="dia" icon={<FieldTimeOutlined />}>
-            <Link to={`/main/dia`} />
-            Dia
-          </Menu.Item>
-          <Menu.Item key="ano" icon={<FieldTimeOutlined />}>
-            <Link to={`/main/ano`} />
-            Ano
-          </Menu.Item>
-          <Menu.Item key="fase" icon={<FieldTimeOutlined />}>
-            <Link to={`/main/fase`} />
-            Fase
-          </Menu.Item>
-          <Menu.Item key="matricula" icon={<FieldTimeOutlined />}>
-            <Link to={`/main/matricula`} />
-            Matricular
-          </Menu.Item>
+          <SubMenu key="subGrade" title="Grade" icon={<ScheduleOutlined />}>
+            <Menu.Item key="turnos" icon={<TeamOutlined />}>
+              <Link to={`/main/turnos`} />
+              Turnos
+            </Menu.Item>
+            <Menu.Item key="dia" icon={<HourglassOutlined />}>
+              <Link to={`/main/dia`} />
+              Dia
+            </Menu.Item>
+            <Menu.Item key="horarios" icon={<FieldTimeOutlined />}>
+              <Link to={`/main/horarios`} />
+              Horários
+            </Menu.Item>
+          </SubMenu>
 
           <Menu.Item key="usuario" icon={<UserSwitchOutlined />}>
             <Link to={`/main/usuarios`} />
@@ -182,6 +210,7 @@ function MainMenu() {
           style={{ padding: 0 }}
         >
           <Button
+            icon={<LogoutOutlined />}
             type="primary"
             danger
             onClick={Logout}
@@ -204,9 +233,6 @@ function MainMenu() {
             </Route>
             <Route path={`/main/professores`}>
               <ProfessoresMain />
-            </Route>
-            <Route path={`/main/leciona`}>
-              <LecionaMain />
             </Route>
             <Route path={`/main/turmas`}>
               <TurmasMain />

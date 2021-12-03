@@ -38,7 +38,7 @@ function NotAdminMenu() {
         console.log(err);
         history.push("/");
       });
-  }, []);
+  }, [history]);
 
   const Logout = () => {
     logout().then(() => {

@@ -52,7 +52,7 @@ function ManagerMenu() {
         console.log(err);
         history.push("/");
       });
-  }, []);
+  }, [history]);
 
   const Logout = () => {
     logout().then(() => {
@@ -116,10 +116,6 @@ function ManagerMenu() {
             <Menu.Item key="3" icon={<UploadOutlined />}>
               <Link to={`/gerente/professores`} />
               Professores
-            </Menu.Item>
-            <Menu.Item key="8" icon={<UploadOutlined />}>
-              <Link to={`/gerente/professores`} />
-              Leciona
             </Menu.Item>
           </SubMenu>
           <Menu.Item key="4" icon={<TeamOutlined />}>
