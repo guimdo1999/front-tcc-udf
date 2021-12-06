@@ -136,7 +136,7 @@ function FormHorario({ handleOk, horario }) {
         label="Hora inicial"
         rules={[{ required: true }]}
       >
-        <TimePicker format={format} placeholder="08:25" />
+        <TimePicker format={format} placeholder="08:25" minuteStep={5} />
         {/*<TimePicker.RangePicker format={format} />*/}
       </Form.Item>
 
@@ -145,7 +145,7 @@ function FormHorario({ handleOk, horario }) {
         label="Hora final"
         rules={[{ required: true }]}
       >
-        <TimePicker format={format} placeholder="09:15" />
+        <TimePicker format={format} placeholder="09:15" minuteStep={5} />
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 18 }}>

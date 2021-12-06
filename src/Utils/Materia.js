@@ -4,6 +4,7 @@ export const insertMateria = async (dados) => {
   const registrar_materia = {
     nome_materia: dados.nome_materia,
     is_active: dados.is_active,
+    qtd_materia: dados.qtd_materia,
     fk_disciplina: dados.fk_disciplina,
     fk_serie: dados.fk_serie,
   };
@@ -34,6 +35,9 @@ export const putMateriaId = async (id, dados) => {
   const update_materia = {
     nome_materia: dados.nome_materia,
     is_active: dados.is_active,
+    qtd_materia: dados.qtd_materia,
+    fk_disciplina: dados.fk_disciplina,
+    fk_serie: dados.fk_serie,
   };
   return await backEndUtils
     .chamarBackEnd("PUT", "/api/materia/" + id, update_materia)

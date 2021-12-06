@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, message } from "antd";
+import { Form, Input, Button, Select, message, InputNumber } from "antd";
 import { insertMateria, putMateriaId } from "../../Utils/Materia";
 import { getDisciplina } from "../../Utils/Disciplina";
 import { getSerie } from "../../Utils/Serie";
@@ -7,7 +7,7 @@ import { getSerie } from "../../Utils/Serie";
 function FormMateria({ handleOk, materia }) {
   const layout = {
     labelCol: { span: 7 },
-    wrapperCol: { span: 10 },
+    wrapperCol: { span: 12 },
   };
 
   const [disciplina, setDisciplina] = useState([]);
@@ -109,6 +109,13 @@ function FormMateria({ handleOk, materia }) {
             );
           })}
         </Select>
+      </Form.Item>
+      <Form.Item
+        name={"qtd_materia"}
+        label="Aulas/Semana"
+        rules={[{ required: true }]}
+      >
+        <InputNumber placeholder="EX: 2 / 4 / 10" style={{ width: "100%" }} />
       </Form.Item>
 
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 18 }}>

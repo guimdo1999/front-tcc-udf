@@ -99,6 +99,18 @@ function TurmasMain() {
       },
     },
     {
+      title: "Turno",
+      dataIndex: "Turnos",
+      key: "Turnos",
+      render: (Turnos) => {
+        if (Turnos) {
+          return Turnos.nome_turno;
+        } else {
+          return null;
+        }
+      },
+    },
+    {
       title: "Está Ativo",
       dataIndex: "is_active",
       key: "is_active",

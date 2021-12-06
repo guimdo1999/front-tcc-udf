@@ -4,6 +4,7 @@ import { insertTurma, putTurmaId } from "../../Utils/Turma";
 import { getSerie } from "../../Utils/Serie";
 
 import moment from "moment";
+import { getTurno } from "../../Utils/Turno";
 
 function FormTurma({ handleOk, turma }) {
   const layout = {
@@ -12,6 +13,7 @@ function FormTurma({ handleOk, turma }) {
   };
 
   const [serie, setSerie] = useState([]);
+  const [turno, setTurno] = useState([]);
 
   /* eslint-disable no-template-curly-in-string */
   const validateMessages = {
@@ -51,8 +53,8 @@ function FormTurma({ handleOk, turma }) {
   var data_fim;
 
   if (turma) {
-    data_inicio = moment(turma.data_inicio, format);
-    data_fim = moment(turma.data_fim, format);
+    data_inicio = moment(turma.data_inicio);
+    data_fim = moment(turma.data_fim);
   } else {
     data_inicio = "";
     data_fim = "";
@@ -61,6 +63,9 @@ function FormTurma({ handleOk, turma }) {
   useEffect(() => {
     getSerie().then((data) => {
       setSerie(data);
+    });
+    getTurno().then((data) => {
+      setTurno(data);
     });
   }, []);
 
@@ -75,6 +80,7 @@ function FormTurma({ handleOk, turma }) {
         data_inicio: data_inicio,
         data_fim: data_fim,
         fk_serie: turma?.fk_serie,
+        fk_turno: turma?.fk_turno,
         is_active: turma?.is_active,
       }}
     >
@@ -91,7 +97,7 @@ function FormTurma({ handleOk, turma }) {
         label="Data de Inicio"
         rules={[{ required: true }]}
       >
-        <DatePicker format={format} />
+        <DatePicker format={format} placeholder="01/01/2021" />
       </Form.Item>
 
       <Form.Item
@@ -99,7 +105,7 @@ function FormTurma({ handleOk, turma }) {
         label="Data de fim"
         rules={[{ required: true }]}
       >
-        <DatePicker format={format} />
+        <DatePicker format={format} placeholder="31/12/2021" />
       </Form.Item>
 
       <Form.Item name={"fk_serie"} label="Série" rules={[{ required: true }]}>
@@ -108,6 +114,17 @@ function FormTurma({ handleOk, turma }) {
             return (
               <Select.Option value={item.id_serie}>
                 {item.nome_serie}
+              </Select.Option>
+            );
+          })}
+        </Select>
+      </Form.Item>
+      <Form.Item name={"fk_turno"} label="Turno" rules={[{ required: true }]}>
+        <Select style={{ width: "100%" }} placeholder="Selecione uma Série">
+          {turno.map((item) => {
+            return (
+              <Select.Option value={item.id_turno}>
+                {item.nome_turno}
               </Select.Option>
             );
           })}

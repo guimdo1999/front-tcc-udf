@@ -89,7 +89,11 @@ function FormMatricula({ handleOk, matricula, aluno, turma }) {
         label="Data da Matrícula"
         rules={[{ required: true }]}
       >
-        <DatePicker format={format} placeholder="Selecione uma data" />
+        <DatePicker
+          format={format}
+          placeholder="Selecione uma data"
+          style={{ width: "100%" }}
+        />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 15 }}>
         <Button type="primary" htmlType="submit">

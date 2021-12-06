@@ -90,6 +90,11 @@ function MateriaMain() {
       },
     },
     {
+      title: "Quantidade de Aulas/Semana",
+      dataIndex: "qtd_materia",
+      key: "qtd_materia",
+    },
+    {
       title: "Está Ativo",
       dataIndex: "is_active",
       key: "is_active",

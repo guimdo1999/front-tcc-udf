@@ -42,7 +42,7 @@ import AnoMain from "../pages/Ano/AnoMain";
 import DiaMain from "../pages/Dia/DiaMain";
 import FaseMain from "../pages/Fase/FaseMain";
 import SerieMain from "../pages/Serie/SerieMain";
-import MateriaMain from "../pages/Materia/MateiraMain";
+import MateriaMain from "../pages/Materia/MateriaMain";
 import MatriculaMain from "../pages/Matricular/MatriculaMain";
 import Page404 from "../pages/Page404";
 
@@ -156,11 +156,11 @@ function MainMenu() {
               Aulas
             </Menu.Item>
           </SubMenu>
+          <Menu.Item key="turnos" icon={<TeamOutlined />}>
+            <Link to={`/main/turnos`} />
+            Turnos
+          </Menu.Item>
           <SubMenu key="subTurmas" title="Turmas" icon={<ReadOutlined />}>
-            <Menu.Item key="serie" icon={<ContactsOutlined />}>
-              <Link to={`/main/serie`} />
-              Série
-            </Menu.Item>
             <Menu.Item key="ano" icon={<CalendarOutlined />}>
               <Link to={`/main/ano`} />
               Ano
@@ -168,6 +168,10 @@ function MainMenu() {
             <Menu.Item key="fase" icon={<FieldTimeOutlined />}>
               <Link to={`/main/fase`} />
               Fase
+            </Menu.Item>
+            <Menu.Item key="serie" icon={<ContactsOutlined />}>
+              <Link to={`/main/serie`} />
+              Série
             </Menu.Item>
             <Menu.Item key="turmas" icon={<TeamOutlined />}>
               <Link to={`/main/turmas`} />
@@ -183,10 +187,6 @@ function MainMenu() {
             </Menu.Item>
           </SubMenu>
           <SubMenu key="subGrade" title="Grade" icon={<ScheduleOutlined />}>
-            <Menu.Item key="turnos" icon={<TeamOutlined />}>
-              <Link to={`/main/turnos`} />
-              Turnos
-            </Menu.Item>
             <Menu.Item key="dia" icon={<HourglassOutlined />}>
               <Link to={`/main/dia`} />
               Dia
@@ -273,12 +273,7 @@ function MainMenu() {
             </Route>
           </Switch>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Criado por Guilherme Matos de Oliveira, Lucas Querneu e Domingos
-          Gomes.
-          <br />
-          Utilizado Ant Design ©2018 Created by Ant UED.
-        </Footer>
+        <Footer style={{ textAlign: "center" }}></Footer>
       </Layout>
     </Layout>
   );

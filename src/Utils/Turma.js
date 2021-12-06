@@ -6,6 +6,7 @@ export const insertTurma = async (dados) => {
     data_inicio: dados.data_inicio,
     data_fim: dados.data_fim,
     fk_serie: dados.fk_serie,
+    fk_turno: dados.fk_turno,
     is_active: dados.is_active,
   };
   return await backEndUtils
@@ -20,6 +21,7 @@ export const putTurmaId = async (id, dados) => {
     data_inicio: dados.data_inicio,
     data_fim: dados.data_fim,
     fk_serie: dados.fk_serie,
+    fk_turno: dados.fk_turno,
     is_active: dados.is_active,
   };
   return await backEndUtils

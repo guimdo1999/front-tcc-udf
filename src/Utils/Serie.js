@@ -5,7 +5,7 @@ export const insertSerie = async (dados) => {
     nome_serie: dados.nome_serie,
     is_active: dados.is_active,
     fk_ano: dados.fk_ano,
-    fk_serie: dados.fk_serie,
+    fk_fase: dados.fk_fase,
   };
   return await backEndUtils
     .chamarBackEnd("POST", "/api/serie", registrar_serie)
@@ -35,7 +35,7 @@ export const putSerieId = async (id, dados) => {
     nome_serie: dados.nome_serie,
     is_active: dados.is_active,
     fk_ano: dados.fk_ano,
-    fk_serie: dados.fk_serie,
+    fk_fase: dados.fk_fase,
   };
   return await backEndUtils
     .chamarBackEnd("PUT", "/api/serie/" + id, update_serie)

@@ -71,7 +71,7 @@ function FormProfessor({ handleOk, professor }) {
         label="Horas/semana"
         rules={[{ required: true }]}
       >
-        <InputNumber placeholder="EX: 40" />
+        <InputNumber placeholder="EX: 40" style={{ width: "100%" }} />
       </Form.Item>
 
       <Form.Item

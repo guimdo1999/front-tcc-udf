@@ -87,7 +87,7 @@ function FormAluno({ handleOk, aluno }) {
         name={"matricula"}
         rules={[{ required: true }]}
       >
-        <InputNumber placeholder="EX: 27886542" width="100%" />
+        <InputNumber placeholder="EX: 27886542" style={{ width: "100%" }} />
       </Form.Item>
 
       <Form.Item
@@ -95,7 +95,7 @@ function FormAluno({ handleOk, aluno }) {
         label="Data de Nascimento"
         rules={[{ required: true }]}
       >
-        <DatePicker format={format} />
+        <DatePicker format={format} placeholder="15/04/2000" />
       </Form.Item>
 
       <Form.Item label="Sexo" name={"cod_sexo"} rules={[{ required: true }]}>
