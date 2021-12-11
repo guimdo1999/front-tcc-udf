@@ -80,14 +80,18 @@ function MatriculaMain() {
       content: `Cadastrando a o ${aluno1} na turma: ${turma1} .`,
       key,
     });
-    insertMatricula(value)
-      .then((resposta) => {
-        message.success({ content: resposta.message, key, duration: 2 });
-        handleOk();
-      })
-      .catch(() => {
-        message.error({ content: `Falha ao comunicar com o servidor.`, key });
-      });
+    if (checkAlunoMatriculado(busca, value.fk_aluno)) {
+      insertMatricula(value)
+        .then((resposta) => {
+          message.success({ content: resposta.message, key, duration: 2 });
+          handleOk();
+        })
+        .catch(() => {
+          message.error({ content: `Falha ao comunicar com o servidor.`, key });
+        });
+    } else {
+      message.error({ content: `Aluno já matriculado!`, key });
+    }
   };
 
   useEffect(() => {
@@ -97,13 +101,22 @@ function MatriculaMain() {
     getTurma().then((data) => {
       setTurma(data);
     });
-    if (reload === true) {
-      getMatricula().then((data) => {
-        setBusca(data);
-      });
-    }
+
+    getMatricula().then((data) => {
+      setBusca(data);
+    });
+
     setReload(false);
   }, [reload]);
+
+  function checkAlunoMatriculado(matricula, id_aluno) {
+    let retorno = true;
+    const found = matricula.find((obj) => obj.fk_aluno === id_aluno);
+    if (found) {
+      retorno = false;
+    }
+    return retorno;
+  }
 
   const columns = [
     {

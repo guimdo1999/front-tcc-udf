@@ -23,6 +23,7 @@ import {
   SolutionOutlined,
   ScheduleOutlined,
   ReadOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 
 import SubMenu from "antd/lib/menu/SubMenu";
@@ -45,6 +46,9 @@ import SerieMain from "../pages/Serie/SerieMain";
 import MateriaMain from "../pages/Materia/MateriaMain";
 import MatriculaMain from "../pages/Matricular/MatriculaMain";
 import Page404 from "../pages/Page404";
+import MeuUsuario from "../pages/Usuarios/meuUsuario";
+import ConfigMain from "../pages/Config";
+import { getConfigId } from "../Utils/Config";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -52,8 +56,14 @@ const rootSubmenuKeys = ["subLeciona", "subTurmas", "subGrade"];
 
 function MainMenu() {
   const [nomeUsuario, setNomeUsuario] = useState("");
+  const [config1, setconfig] = useState([]);
+
   const history = useHistory();
   useEffect(() => {
+    getConfigId().then((data) => {
+      setconfig(data);
+      console.log(config1);
+    });
     getMe()
       .then((data) => {
         setNomeUsuario(data.cod_login);
@@ -118,7 +128,9 @@ function MainMenu() {
           className="site-layout-sub-header-background"
           style={{ paddingLeft: "5%" }}
         >
-          <Avatar size={32}>{nomeUsuario}</Avatar>
+          <Link to={`/main/atualizar-senha`}>
+            <Avatar size={32}>{nomeUsuario}</Avatar>
+          </Link>
         </Header>
         <Menu
           theme="dark"
@@ -201,6 +213,10 @@ function MainMenu() {
             <Link to={`/main/usuarios`} />
             Gerenciar Usuários
           </Menu.Item>
+          <Menu.Item key="config" icon={<SettingOutlined />}>
+            <Link to={`/main/config`} Config={config1} />
+            Configurar Grade
+          </Menu.Item>
         </Menu>
       </Sider>
 
@@ -267,6 +283,12 @@ function MainMenu() {
             </Route>
             <Route path={`/main/matricula`}>
               <MatriculaMain />
+            </Route>
+            <Route path={`/main/atualizar-senha`}>
+              <MeuUsuario />
+            </Route>
+            <Route path={`/main/config`}>
+              <ConfigMain />
             </Route>
             <Route>
               <Page404 />

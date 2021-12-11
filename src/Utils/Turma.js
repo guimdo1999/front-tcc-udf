@@ -38,6 +38,13 @@ export const getTurma = async () => {
       return resposta.json().then((data) => data.data);
     });
 };
+export const getTurmaId = async (id) => {
+  return await backEndUtils
+    .chamarBackEnd("GET", "/api/turma/" + id)
+    .then((resposta) => {
+      return resposta.json().then((data) => data.data);
+    });
+};
 export const deleteTurma = async (id) => {
   return await backEndUtils
     .chamarBackEnd("DELETE", "/api/turma/" + id)

@@ -9,8 +9,7 @@ import UpdateUsuario from "./UpdateUsuario";
 function UsuariosMain() {
   const [busca, setBusca] = useState([]);
   const [valueF, setValueF] = useState("");
-  const [reload, setReload] = useState(false);
-  const [nomeUser, setNomeUser] = useState("");
+  const [reload, setReload] = useState(true);
 
   /*MODAL*/
   const [visible, setVisible] = useState(false);
@@ -31,9 +30,13 @@ function UsuariosMain() {
 
   useEffect(() => {
     getMe().then((data1) => {
-      setNomeUser(data1.cod_login);
       if (valueF === "" || reload === true) {
         getUsuarios().then((data) => {
+          for (var i = data.length - 1; i >= 0; --i) {
+            if (data[i].id === data1.id) {
+              data.splice(i, 1);
+            }
+          }
           setBusca(data);
 
           setReload(false);
@@ -126,14 +129,7 @@ function UsuariosMain() {
       <br></br>
       <br></br>
       {modalContent}
-      <p
-        style={{
-          width: "45%",
-          float: "left",
-        }}
-      >
-        Cuidado com seu próprio usuário, cujo é: <b>{nomeUser}</b>
-      </p>
+
       <Search
         placeholder="Pesquisar por usuário"
         allowClear

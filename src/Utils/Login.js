@@ -34,6 +34,7 @@ export const logout = async () => {
 
 export const putUsuario = async (id, data) => {
   const usuario = {
+    id: id,
     cod_login: data.cod_login,
     cod_senha: data.cod_senha,
     cod_perfil: data.cod_perfil,

@@ -67,6 +67,8 @@ function FormAula({ handleOk, aula }) {
       initialValues={{
         nome_aula: aula?.nome_aula,
         is_active: aula?.is_active,
+        fk_professor: aula?.fk_professor,
+        fk_materia: aula?.fk_materia,
       }}
     >
       <Form.Item

@@ -66,6 +66,9 @@ function FormMateria({ handleOk, materia }) {
       initialValues={{
         nome_materia: materia?.nome_materia,
         is_active: materia?.is_active,
+        qtd_materia: materia?.qtd_materia,
+        fk_disciplina: materia?.fk_disciplina,
+        fk_serie: materia?.fk_serie,
       }}
     >
       <Form.Item
