@@ -6,7 +6,6 @@ import { cookies } from "../Login/Login";
 
 function MeuUsuario() {
   var cod_login = "";
-  var id_user = 0;
   var cod_perfil = "";
   const history = useHistory();
 
@@ -29,30 +28,19 @@ function MeuUsuario() {
     } else {
       values = {
         cod_login: cod_login,
-        id: id_user,
         cod_perfil: cod_perfil,
         cod_senha: values.cod_senha,
       };
       console.log(values);
 
-      putUsuario(values.id, values).then(() => {
-        alert(`Atualizado o usuário: ${cod_login}, logue novamente.`);
-        Logout();
-      });
+      putUsuario(values.cod_login, values).then(() => {});
+      alert(`Atualizado o usuário`);
     }
-  };
-  const Logout = () => {
-    logout().then(() => {
-      cookies.remove("auth_token");
-      history.push("/");
-      document.location.reload();
-    });
   };
 
   useEffect(() => {
     getMe().then((data) => {
       cod_login = data.cod_login;
-      id_user = data.id;
       cod_perfil = data.cod_perfil;
     });
   }, []);

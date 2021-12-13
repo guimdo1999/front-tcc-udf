@@ -59,3 +59,5 @@ export const deleteGrade = async (id) => {
       return resposta.json().then((data) => data.data);
     });
 };
+
+// GEO - PORT - MAT - ART

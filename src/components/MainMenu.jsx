@@ -56,14 +56,16 @@ const rootSubmenuKeys = ["subLeciona", "subTurmas", "subGrade"];
 
 function MainMenu() {
   const [nomeUsuario, setNomeUsuario] = useState("");
-  const [config1, setconfig] = useState([]);
+  const [config, setconfig] = useState([]);
 
   const history = useHistory();
   useEffect(() => {
-    getConfigId().then((data) => {
-      setconfig(data);
-      console.log(config1);
-    });
+    getConfigId()
+      .then((data) => {
+        setconfig(data);
+      })
+      .catch((err) => console.log(err));
+
     getMe()
       .then((data) => {
         setNomeUsuario(data.cod_login);
@@ -214,7 +216,7 @@ function MainMenu() {
             Gerenciar Usuários
           </Menu.Item>
           <Menu.Item key="config" icon={<SettingOutlined />}>
-            <Link to={`/main/config`} Config={config1} />
+            <Link to={`/main/config`} />
             Configurar Grade
           </Menu.Item>
         </Menu>
@@ -288,7 +290,7 @@ function MainMenu() {
               <MeuUsuario />
             </Route>
             <Route path={`/main/config`}>
-              <ConfigMain />
+              <ConfigMain Config={config} />
             </Route>
             <Route>
               <Page404 />

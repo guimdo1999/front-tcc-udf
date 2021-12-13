@@ -6,7 +6,7 @@ import moment from "moment";
 import { insertGrade } from "../Utils/Grade";
 
 function Gradegerada({ Grade_Gerada, horario, professor, aula, handleOk }) {
-  const format = "HH:MM";
+  const format = "HH:mm";
   const key = "updatable";
 
   const columns = [
@@ -29,6 +29,8 @@ function Gradegerada({ Grade_Gerada, horario, professor, aula, handleOk }) {
           );
         }
       },
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.id_horario - b.id_horario,
     },
     {
       title: "Nome da Aula",

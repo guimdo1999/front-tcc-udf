@@ -6,7 +6,7 @@ import { deleteMatricula } from "../Utils/Matricula";
 import DeletePop from "../components/DeletePop";
 import moment from "moment";
 import { getDia } from "../Utils/Dia";
-import { generateGrade, getGrade } from "../Utils/Grade";
+import { deleteGrade, generateGrade, getGrade } from "../Utils/Grade";
 import Search from "antd/lib/input/Search";
 import { getProfessor } from "../Utils/Professor";
 import { getTurma, getTurmaId } from "../Utils/Turma";
@@ -32,7 +32,7 @@ function Home() {
   const [horario, setHorario] = useState([]);
 
   const [aluno, setAluno] = useState([]);
-  const format = "HH:MM";
+  const format = "HH:mm";
   /*MODAL*/
   const [visible, setVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
@@ -50,25 +50,22 @@ function Home() {
 
   /*Pop*/
   const handlePopOk = (value) => {
-    deleteMatricula(value.id_aluno_turma)
-      .then(() => {
-        message.success({
-          content: `Matricula foi deletada.`,
-          key,
+    message.loading({
+      content: `Deletando a grade...`,
+      key,
+    });
+    grade.Grades.forEach((element) => {
+      deleteGrade(element.id_grade)
+        .then()
+        .catch(() => {
+          message.error({ content: `Falha ao comunicar com o servidor.`, key });
+          handleCancel();
         });
-        handleOk();
-      })
-      .catch(() => {
-        message.error({ content: `Falha ao comunicar com o servidor.`, key });
-        handleCancel();
-      });
+    });
+    handleOk();
+    message.success({ content: "Grade deletada", key, duration: 2 });
   };
   /*Pop*/
-
-  /* eslint-disable no-template-curly-in-string */
-  const validateMessages = {
-    required: "${label} precisa ser preenchido!",
-  };
 
   useEffect(() => {
     getTurma().then((data) => {
@@ -91,8 +88,6 @@ function Home() {
 
     getGrade().then((data) => {
       setBusca(data);
-
-      //console.log(grade);
     });
 
     if (id_da_turma !== "") {
@@ -140,6 +135,8 @@ function Home() {
           );
         }
       },
+      defaultSortOrder: "ascend",
+      sorter: (a, b) => a.fk_horario - b.fk_horario,
     },
     {
       title: "Nome da Aula",
@@ -185,7 +182,7 @@ function Home() {
   ];
   return (
     <Card title="Gerenciamento de Grade" style={{ width: "100%" }}>
-      <Row>
+      <Row style={{ marginBottom: 15 }}>
         <Space>
           <Select
             key="select_turma"
@@ -250,27 +247,16 @@ function Home() {
             Criar Nova Grade
           </Button>
 
+          <DeletePop
+            deleteFunction={() => {
+              handlePopOk();
+            }}
+            titulo="Deletar a Grade"
+          />
+
           {modalContent}
         </Space>
       </Row>
-
-      <Search
-        placeholder="Pesquisar por Ano"
-        allowClear
-        onChange={(e) => {
-          const valorAtual = e.target.value.toLocaleLowerCase();
-
-          const filteredData = busca.filter((entry) =>
-            entry.nome_ano.toLocaleLowerCase().includes(valorAtual)
-          );
-          setBusca(filteredData);
-        }}
-        style={{
-          width: "45%",
-          float: "right",
-          margin: "5px",
-        }}
-      />
 
       <Table
         columns={columns}

@@ -1,9 +1,12 @@
 import { Button, Popconfirm } from "antd";
 import React, { useState } from "react";
 
-function DeletePop({ deleteFunction }) {
+function DeletePop({ deleteFunction, titulo }) {
   const [visiblePop, setVisiblePop] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  if (!titulo) {
+    titulo = "Deletar";
+  }
 
   const mostrarPop = () => {
     setVisiblePop(true);
@@ -37,7 +40,7 @@ function DeletePop({ deleteFunction }) {
           mostrarPop();
         }}
       >
-        Deletar
+        {titulo}
       </Button>
     </Popconfirm>
   );

@@ -18,8 +18,8 @@ export const updateConfig = async (dados) => {
 
 export const getConfigId = async () => {
   return await backEndUtils
-    .chamarBackEnd("GET", `/api/config`)
+    .chamarBackEnd("GET", `/api/config/1`)
     .then((resposta) => {
-      return resposta.json().then((data) => data);
+      return resposta.json().then((dados) => dados.data);
     });
 };
