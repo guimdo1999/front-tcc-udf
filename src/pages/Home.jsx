@@ -241,7 +241,7 @@ function Home() {
 
       <Table
         columns={columns}
-        pagination={{ pageSize: 10 }}
+        pagination={{ pageSize: 6 }}
         dataSource={grade.Grades}
         showSorterTooltip={false}
       />
