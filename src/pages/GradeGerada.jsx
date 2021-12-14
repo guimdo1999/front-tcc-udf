@@ -33,6 +33,11 @@ function Gradegerada({ Grade_Gerada, horario, professor, aula, handleOk }) {
       sorter: (a, b) => a.id_horario - b.id_horario,
     },
     {
+      title: "Matéria",
+      dataIndex: "nome_materia",
+      key: "nome_materia",
+    },
+    {
       title: "Nome da Aula",
       dataIndex: "id_aula_atual",
       key: "id_aula_atual",
@@ -42,12 +47,6 @@ function Gradegerada({ Grade_Gerada, horario, professor, aula, handleOk }) {
           return found.nome_aula;
         }
       },
-    },
-
-    {
-      title: "Matéria",
-      dataIndex: "nome_materia",
-      key: "nome_materia",
     },
     {
       title: "Professor",
