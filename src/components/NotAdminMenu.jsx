@@ -115,11 +115,7 @@ function NotAdminMenu() {
             </Route>
           </Switch>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Criado por Guilherme Matos de Oliveira, Lucas Querneu e Domingos
-          Gomes. <br />
-          Utilizado Ant Design ©2018 Created by Ant UED.
-        </Footer>
+        <Footer style={{ textAlign: "center" }}></Footer>
       </Layout>
     </Layout>
   );
