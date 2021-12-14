@@ -195,12 +195,14 @@ function Home() {
 
                     setVisible(true);
                   } else {
+                    alert("Está turma já possui uma grade.");
                     message.error({
                       content: `Está turma já possui uma grade.`,
                       key,
                     });
                   }
                 });
+
                 setModalContent(
                   <Modal
                     title={`Cadastrando nova grade`}
