@@ -74,7 +74,7 @@ function MainMenu() {
             history.push("/home");
             break;
           case "Gerente":
-            history.push("/gerente");
+            history.push("/gerente/home");
             break;
           default:
             console.log("");

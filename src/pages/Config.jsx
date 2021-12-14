@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Form, Input, Button, message, Card } from "antd";
 import { updateConfig } from "../Utils/Config";
 
 function ConfigMain({ Config }) {
   //
-  const [reload, setReload] = useState(false);
+
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 9 },
@@ -31,13 +31,11 @@ function ConfigMain({ Config }) {
           key,
           duration: 2,
         });
-        setReload(true);
       })
       .catch(() => {
         message.error({ content: `Falha ao comunicar com o servidor.`, key });
       });
   };
-  console.log(Config);
 
   return (
     <Card title="Configurações">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Button, Table, message, Card } from "antd";
 import moment from "moment";
@@ -102,6 +102,7 @@ function Gradegerada({ Grade_Gerada, horario, professor, aula, handleOk }) {
             duration: 2,
           });
           handleOk();
+          window.location.reload(false);
         }}
         style={{ width: "15%", float: "right", margin: "5px" }}
       >

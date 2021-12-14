@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Input } from "antd";
-import { getMe, logout, putUsuario } from "../../Utils/Login";
-import { useHistory } from "react-router-dom";
-import { cookies } from "../Login/Login";
+import { getMe, putUsuario } from "../../Utils/Login";
 
 function MeuUsuario() {
   var cod_login = "";
   var cod_perfil = "";
-  const history = useHistory();
 
   const layout = {
     labelCol: { span: 7 },
@@ -40,7 +37,9 @@ function MeuUsuario() {
 
   useEffect(() => {
     getMe().then((data) => {
+      // eslint-disable-next-line
       cod_login = data.cod_login;
+      // eslint-disable-next-line
       cod_perfil = data.cod_perfil;
     });
   }, []);

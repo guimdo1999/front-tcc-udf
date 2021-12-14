@@ -4,13 +4,13 @@ import "./estiloMenu.css";
 import { Link, useHistory, Switch } from "react-router-dom";
 import { BrowserRouter as Route } from "react-router-dom";
 
-import { Button, Layout, Menu } from "antd";
+import { Avatar, Button, Layout, Menu } from "antd";
 import { BorderlessTableOutlined } from "@ant-design/icons";
 import { getMe, logout } from "../Utils/Login";
 
-import Home from "../pages/Home";
 import { cookies } from "../pages/Login/Login";
 import Page404 from "../pages/Page404";
+import HomeUser from "../pages/HomeUser";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -78,7 +78,9 @@ function NotAdminMenu() {
           className="site-layout-sub-header-background"
           style={{ padding: 0 }}
         >
-          <p>Olá {nomeUsuario}</p>
+          <Link to={`/gerente/atualizar-senha`}>
+            <Avatar size={32}>{nomeUsuario}</Avatar>
+          </Link>
         </Header>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
           {/* AQUI LIGAMOS BOTÕES AS PAGES*/}
@@ -106,7 +108,7 @@ function NotAdminMenu() {
           {/* AQUI VÃO AS PAGES E SUAS ROTAS */}
           <Switch>
             <Route path={`/home`}>
-              <Home />
+              <HomeUser />
             </Route>
             <Route>
               <Page404 />
