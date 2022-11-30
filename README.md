@@ -3,6 +3,8 @@
 This projects aims to create a full interface for schools to dynamic generate class schedules while controlling students and professors info.
 It uses reactJS + Javascript. AntD was used in the design as a component library.
 
+Backend: https://github.com/querneu/back-tcc-udf
+
 Database:
 ![image](https://user-images.githubusercontent.com/57801041/204780674-7220ca45-b842-4f42-a9c4-514782152725.png)
 
