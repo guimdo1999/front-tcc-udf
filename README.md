@@ -1,4 +1,4 @@
-#School database interface.
+# School database interface.
 
 This projects aims to create a full interface for schools to dynamic generate class schedules while controlling students and professors info.
 It uses reactJS + Javascript. AntD was used in the design as a component library.
