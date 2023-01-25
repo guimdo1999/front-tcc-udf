@@ -5,6 +5,17 @@ It uses reactJS + Javascript. AntD was used in the design as a component library
 
 Backend: https://github.com/querneu/back-tcc-udf
 
+Thesis Document(pt-BR): https://drive.google.com/file/d/1h0ppACHsChSY3fmq18-6a61kLmnMieCg/view
+
+Sample Images from parts of the System: 
+
+![image](https://user-images.githubusercontent.com/57801041/214576306-488bd33a-48be-42ee-8b59-db4d3ff1f441.png)
+
+![image](https://user-images.githubusercontent.com/57801041/214576363-4b2ae179-edfb-4e58-b182-b93a37df6ea5.png)
+
+![image](https://user-images.githubusercontent.com/57801041/214576616-e407df86-c146-4652-ab9f-eec9b46da541.png)
+
+
 Database:
 ![image](https://user-images.githubusercontent.com/57801041/204780674-7220ca45-b842-4f42-a9c4-514782152725.png)
 
