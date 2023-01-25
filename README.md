@@ -19,9 +19,6 @@ Sample Images from parts of the System:
 Database:
 ![image](https://user-images.githubusercontent.com/57801041/204780674-7220ca45-b842-4f42-a9c4-514782152725.png)
 
-Main document:
-[TCCAlunosProfWilsonAmaral.docx](https://github.com/guimdo1999/front-tcc-udf/files/10122409/TCCAlunosProfWilsonAmaral.docx)
-
 
 -------------------------
 # Getting Started with Create React App
